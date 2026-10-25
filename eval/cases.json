@@ -1,0 +1,426 @@
+[
+  {
+    "id": "c01-clean-washer",
+    "category": "clean",
+    "utterance": "Finished the service on the pressure washer. Swapped two O-ring seals and one hose clamp, took about forty minutes. The pump seals were leaking.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Pressure Washer #01",
+      "parts": {
+        "O-Ring Seals": 2,
+        "Hose Clamps": 1
+      },
+      "duration_minutes": 40
+    }
+  },
+  {
+    "id": "c02-clean-pump",
+    "category": "clean",
+    "utterance": "Water pump one, replaced two bearings, took an hour and a half. Bearing noise is gone.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Water Pump #01",
+      "parts": {
+        "Bearings": 2
+      },
+      "duration_minutes": 90
+    }
+  },
+  {
+    "id": "c03-clean-no-parts",
+    "category": "clean",
+    "utterance": "Inspected air compressor number two. No parts used, twenty minutes, everything looks good.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Air Compressor #02",
+      "parts": {},
+      "duration_minutes": 20
+    }
+  },
+  {
+    "id": "c04-clean-generator",
+    "category": "clean",
+    "utterance": "Tune-up on generator three. Replaced two spark plugs, thirty-five minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Generator #03",
+      "parts": {
+        "Spark Plugs": 2
+      },
+      "duration_minutes": 35
+    }
+  },
+  {
+    "id": "c05-clean-mixer",
+    "category": "clean",
+    "utterance": "Concrete mixer one, the drive chain was stretched so I put on one replacement chain. Two hours.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Concrete Mixer #01",
+      "parts": {
+        "Replacement Chains": 1
+      },
+      "duration_minutes": 120
+    }
+  },
+  {
+    "id": "c06-clean-welder",
+    "category": "clean",
+    "utterance": "Welding machine two, swapped three welding tips, fifteen minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Welding Machine #02",
+      "parts": {
+        "Welding Tips": 3
+      },
+      "duration_minutes": 15
+    }
+  },
+  {
+    "id": "c07-clean-drill",
+    "category": "clean",
+    "utterance": "Cordless drill two wouldn't hold a charge. Put in one new power tool battery, ten minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Cordless Drill #02",
+      "parts": {
+        "Power Tool Batteries": 1
+      },
+      "duration_minutes": 10
+    }
+  },
+  {
+    "id": "c08-ambiguous-generator",
+    "category": "ambiguous_equipment",
+    "mistake": true,
+    "utterance": "Changed one air filter on the generator, thirty minutes.",
+    "answers": {
+      "ambiguous_equipment": "Generator two."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Generator #02",
+      "parts": {
+        "Air Filters": 1
+      },
+      "duration_minutes": 30
+    }
+  },
+  {
+    "id": "c09-ambiguous-pump",
+    "category": "ambiguous_equipment",
+    "mistake": true,
+    "utterance": "Replaced a hydraulic hose on the water pump, about fifty minutes.",
+    "answers": {
+      "ambiguous_equipment": "Water pump number two."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Water Pump #02",
+      "parts": {
+        "Hydraulic Hoses": 1
+      },
+      "duration_minutes": 50
+    }
+  },
+  {
+    "id": "c10-ambiguous-filters",
+    "category": "ambiguous_part",
+    "mistake": true,
+    "utterance": "Air compressor one, changed two filters, twenty-five minutes.",
+    "answers": {
+      "ambiguous_part": "Air filters."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Air Compressor #01",
+      "parts": {
+        "Air Filters": 2
+      },
+      "duration_minutes": 25
+    }
+  },
+  {
+    "id": "c11-unknown-part",
+    "category": "unknown_part",
+    "mistake": true,
+    "utterance": "Rotary hammer one, replaced the carbon brushes, two of them, thirty minutes.",
+    "answers": {
+      "unknown_part": "Those were my own spares. Log it with no parts."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Rotary Hammer #01",
+      "parts": {},
+      "duration_minutes": 30
+    }
+  },
+  {
+    "id": "c12-unknown-equipment",
+    "category": "unknown_equipment",
+    "mistake": true,
+    "utterance": "Fixed the forklift, replaced one bearing, forty minutes.",
+    "answers": {
+      "unknown_equipment": "Sorry, it was the plate compactor."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Plate Compactor #01",
+      "parts": {
+        "Bearings": 1
+      },
+      "duration_minutes": 40
+    }
+  },
+  {
+    "id": "c13-short-belts",
+    "category": "insufficient_stock",
+    "mistake": true,
+    "utterance": "Generator one, replaced three drive belts, one hour.",
+    "answers": {
+      "insufficient_stock": "Then leave the belts off. They came from the truck stock."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Generator #01",
+      "parts": {},
+      "duration_minutes": 60
+    },
+    "precondition": {
+      "part": "Drive Belts",
+      "below": 3
+    }
+  },
+  {
+    "id": "c14-short-discs",
+    "category": "insufficient_stock",
+    "mistake": true,
+    "utterance": "Angle grinder two, went through ten grinding discs, twenty minutes.",
+    "answers": {
+      "insufficient_stock": "Leave the discs off the log, I'll sort it out with the storeroom."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Angle Grinder #02",
+      "parts": {},
+      "duration_minutes": 20
+    },
+    "precondition": {
+      "part": "Grinding Discs",
+      "below": 10
+    }
+  },
+  {
+    "id": "c15-missing-duration",
+    "category": "missing_field",
+    "mistake": true,
+    "utterance": "Shop vacuum one, replaced the air filter, just one.",
+    "answers": {
+      "missing": "About fifteen minutes."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Shop Vacuum #01",
+      "parts": {
+        "Air Filters": 1
+      },
+      "duration_minutes": 15
+    }
+  },
+  {
+    "id": "c16-missing-equipment",
+    "category": "missing_field",
+    "mistake": true,
+    "utterance": "Replaced two hose clamps, ten minutes, the hoses were loose.",
+    "answers": {
+      "missing": "The pressure washer."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Pressure Washer #01",
+      "parts": {
+        "Hose Clamps": 2
+      },
+      "duration_minutes": 10
+    }
+  },
+  {
+    "id": "c17-correction-at-readback",
+    "category": "correction",
+    "mistake": true,
+    "utterance": "Laser level one, calibration check, no parts, thirty minutes.",
+    "answers": {
+      "confirm": [
+        "No, it was laser level two.",
+        "Yes."
+      ]
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Laser Level #02",
+      "parts": {},
+      "duration_minutes": 30
+    }
+  },
+  {
+    "id": "c18-duplicate-part",
+    "category": "duplicate_part",
+    "utterance": "Nail gun one, used two O-ring seals, and then one more O-ring seal, twenty minutes.",
+    "answers": {
+      "duplicate_part": "Three in total."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Nail Gun #01",
+      "parts": {
+        "O-Ring Seals": 3
+      },
+      "duration_minutes": 20
+    }
+  },
+  {
+    "id": "c19-cancel",
+    "category": "cancel",
+    "mistake": true,
+    "utterance": "Tile cutter one, replaced the blade, one saw blade, ten minutes.",
+    "answers": {
+      "confirm": [
+        "No, cancel that. I already logged it on paper."
+      ]
+    },
+    "expected": {
+      "submit": false
+    }
+  },
+  {
+    "id": "c20-multi-issue",
+    "category": "multi_issue",
+    "mistake": true,
+    "utterance": "Generator service, used two drive belts and one filter, an hour.",
+    "answers": {
+      "ambiguous_equipment": "Generator two.",
+      "insufficient_stock": "No belts then, just the filter.",
+      "ambiguous_part": "The air filter."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Generator #02",
+      "parts": {
+        "Air Filters": 1
+      },
+      "duration_minutes": 60
+    },
+    "precondition": {
+      "part": "Drive Belts",
+      "below": 2
+    }
+  },
+  {
+    "id": "h01-clean-saw",
+    "category": "clean",
+    "heldout": true,
+    "utterance": "Circular saw three, put on a new blade, one saw blade, twenty-five minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Circular Saw #03",
+      "parts": {
+        "Saw Blades": 1
+      },
+      "duration_minutes": 25
+    }
+  },
+  {
+    "id": "h02-ambiguous-mixer",
+    "category": "ambiguous_equipment",
+    "heldout": true,
+    "mistake": true,
+    "utterance": "Concrete mixer, topped it up with two hydraulic fluid, fifteen minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Concrete Mixer #02",
+      "parts": {
+        "Hydraulic Fluid": 2
+      },
+      "duration_minutes": 15
+    }
+  },
+  {
+    "id": "h03-short-respirator",
+    "category": "insufficient_stock",
+    "heldout": true,
+    "mistake": true,
+    "utterance": "Replaced four respirator filters on shop vacuum two, ten minutes.",
+    "answers": {
+      "insufficient_stock": "Make it two then."
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Shop Vacuum #02",
+      "parts": {
+        "Respirator Filters": 2
+      },
+      "duration_minutes": 10
+    },
+    "precondition": {
+      "part": "Respirator Filters",
+      "below": 4
+    }
+  },
+  {
+    "id": "h04-missing-duration",
+    "category": "missing_field",
+    "heldout": true,
+    "mistake": true,
+    "utterance": "Impact driver one, swapped in one power tool battery.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Impact Driver #01",
+      "parts": {
+        "Power Tool Batteries": 1
+      },
+      "duration_minutes": 5
+    }
+  },
+  {
+    "id": "h05-correction-duration",
+    "category": "correction",
+    "heldout": true,
+    "mistake": true,
+    "utterance": "Ladder two, replaced the rubber feet, no parts, half an hour.",
+    "answers": {
+      "confirm": [
+        "No, it was forty-five minutes."
+      ]
+    },
+    "expected": {
+      "submit": true,
+      "equipment": "Ladder #02",
+      "parts": {},
+      "duration_minutes": 45
+    }
+  },
+  {
+    "id": "h06-plug-not-spark-plug",
+    "category": "unknown_part",
+    "heldout": true,
+    "mistake": true,
+    "utterance": "Extension reel one, replaced the plug, one plug, twenty minutes.",
+    "answers": {},
+    "expected": {
+      "submit": true,
+      "equipment": "Extension Reel #01",
+      "parts": {},
+      "duration_minutes": 20
+    }
+  }
+]

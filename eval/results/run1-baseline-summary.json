@@ -1,0 +1,74 @@
+{
+  "ran_at": "2026-10-24T17:59:33.956Z",
+  "models": {
+    "provider": "local",
+    "stt": "faster-whisper base.en",
+    "llm": "ollama qwen2.5:7b",
+    "tts": "macOS say (Samantha)"
+  },
+  "llm_warmup_ms": 221,
+  "runs": 26,
+  "completed": 26,
+  "skipped": [],
+  "correct_outcomes": 20,
+  "wrong_submissions": [
+    "c02-clean-pump [text]",
+    "c14-short-discs [text]",
+    "c15-missing-duration [text]"
+  ],
+  "field_accuracy": {
+    "cases_scored": 22,
+    "equipment": 0.9545454545454546,
+    "parts": 0.9090909090909091,
+    "duration_minutes": 0.9545454545454546
+  },
+  "mistakes": {
+    "cases_with_mistake": 16,
+    "caught": 12,
+    "caught_ids": [
+      "c08-ambiguous-generator [text]",
+      "c09-ambiguous-pump [text]",
+      "c10-ambiguous-filters [text]",
+      "c11-unknown-part [text]",
+      "c12-unknown-equipment [text]",
+      "c13-short-belts [text]",
+      "c16-missing-equipment [text]",
+      "c17-correction-at-readback [text]",
+      "c19-cancel [text]",
+      "c08-ambiguous-generator [audio]",
+      "c13-short-belts [audio]",
+      "c15-missing-duration [audio]"
+    ],
+    "missed_ids": [
+      "c14-short-discs [text]",
+      "c15-missing-duration [text]",
+      "c20-multi-issue [text]",
+      "c20-multi-issue [audio]"
+    ]
+  },
+  "unexpected_questions": 25,
+  "turns": 81,
+  "latency_ms": {
+    "total_per_turn": {
+      "median": 3177,
+      "p95": 6615
+    },
+    "llm_per_turn": {
+      "median": 2320,
+      "p95": 3968
+    },
+    "tts_per_turn": {
+      "median": 786,
+      "p95": 928
+    },
+    "stt_audio_turns": {
+      "median": 1540,
+      "p95": 3698
+    },
+    "total_audio_turns": {
+      "median": 6615,
+      "p95": 7692
+    }
+  },
+  "audio_wer_mean": 0.078
+}

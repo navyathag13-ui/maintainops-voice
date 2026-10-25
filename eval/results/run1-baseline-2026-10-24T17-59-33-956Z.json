@@ -1,0 +1,3169 @@
+{
+  "summary": {
+    "ran_at": "2026-10-24T17:59:33.956Z",
+    "models": {
+      "provider": "local",
+      "stt": "faster-whisper base.en",
+      "llm": "ollama qwen2.5:7b",
+      "tts": "macOS say (Samantha)"
+    },
+    "llm_warmup_ms": 221,
+    "runs": 26,
+    "completed": 26,
+    "skipped": [],
+    "correct_outcomes": 20,
+    "wrong_submissions": [
+      "c02-clean-pump [text]",
+      "c14-short-discs [text]",
+      "c15-missing-duration [text]"
+    ],
+    "field_accuracy": {
+      "cases_scored": 22,
+      "equipment": 0.9545454545454546,
+      "parts": 0.9090909090909091,
+      "duration_minutes": 0.9545454545454546
+    },
+    "mistakes": {
+      "cases_with_mistake": 16,
+      "caught": 12,
+      "caught_ids": [
+        "c08-ambiguous-generator [text]",
+        "c09-ambiguous-pump [text]",
+        "c10-ambiguous-filters [text]",
+        "c11-unknown-part [text]",
+        "c12-unknown-equipment [text]",
+        "c13-short-belts [text]",
+        "c16-missing-equipment [text]",
+        "c17-correction-at-readback [text]",
+        "c19-cancel [text]",
+        "c08-ambiguous-generator [audio]",
+        "c13-short-belts [audio]",
+        "c15-missing-duration [audio]"
+      ],
+      "missed_ids": [
+        "c14-short-discs [text]",
+        "c15-missing-duration [text]",
+        "c20-multi-issue [text]",
+        "c20-multi-issue [audio]"
+      ]
+    },
+    "unexpected_questions": 25,
+    "turns": 81,
+    "latency_ms": {
+      "total_per_turn": {
+        "median": 3177,
+        "p95": 6615
+      },
+      "llm_per_turn": {
+        "median": 2320,
+        "p95": 3968
+      },
+      "tts_per_turn": {
+        "median": 786,
+        "p95": 928
+      },
+      "stt_audio_turns": {
+        "median": 1540,
+        "p95": 3698
+      },
+      "total_audio_turns": {
+        "median": 6615,
+        "p95": 7692
+      }
+    },
+    "audio_wer_mean": 0.078
+  },
+  "results": [
+    {
+      "id": "c01-clean-washer",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "O-Ring Seals": 2,
+          "Hose Clamps": 1
+        },
+        "duration_minutes": 40
+      },
+      "submitted": {
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "O-Ring Seals": 2,
+          "Hose Clamps": 1
+        },
+        "duration_minutes": 40,
+        "description": "[Voice log] Duration: 40 min. Pump seals were leaking."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Finished the service on the pressure washer. Swapped two O-ring seals and one hose clamp, took about forty minutes. The pump seals were leaking.",
+          "agent": "I have Pressure Washer #01, 40 minutes, 2 O-Ring Seals, 1 Hose Clamps. Notes: Pump seals were leaking.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "pressure washer",
+                "parts": [
+                  {
+                    "part": "O-ring seal",
+                    "quantity": 2
+                  },
+                  {
+                    "part": "hose clamp",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 40,
+                "notes": "Pump seals were leaking."
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Pressure Washer #01, 40 minutes, 2 O-Ring Seals, 1 Hose Clamps. Notes: Pump seals were leaking.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3968,
+            "ttsMs": 796,
+            "totalMs": 4820
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 5.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 5
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 637,
+            "totalMs": 668
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c02-clean-pump",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Water Pump #01",
+        "parts": {
+          "Bearings": 2
+        },
+        "duration_minutes": 90
+      },
+      "submitted": {
+        "equipment": "Water Pump #01",
+        "parts": {},
+        "duration_minutes": 90,
+        "description": "[Voice log] Duration: 90 min. Replaced two bearings. Bearing noise is gone."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": false,
+        "duration_minutes": true
+      },
+      "correct": false,
+      "wrongSubmission": true,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Water pump one, replaced two bearings, took an hour and a half. Bearing noise is gone.",
+          "agent": "I have Water Pump #01, 90 minutes, no parts. Notes: Replaced two bearings. Bearing noise is gone.. Should I submit it?",
+          "tools": [
+            {
+              "name": "find_equipment",
+              "args": {
+                "query": "Water pump one"
+              },
+              "result": {
+                "status": "resolved",
+                "equipment": {
+                  "id": 17,
+                  "name": "Water Pump #01",
+                  "location": "Garage Storage #1"
+                }
+              }
+            },
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Water Pump #01",
+                "duration_minutes": 90,
+                "notes": "Replaced two bearings. Bearing noise is gone."
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Water Pump #01, 90 minutes, no parts. Notes: Replaced two bearings. Bearing noise is gone.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3939,
+            "ttsMs": 786,
+            "totalMs": 4827
+          },
+          "llmCalls": 2,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 6.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 6
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 653,
+            "totalMs": 683
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c03-clean-no-parts",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Air Compressor #02",
+        "parts": {},
+        "duration_minutes": 20
+      },
+      "submitted": {
+        "equipment": "Air Compressor #02",
+        "parts": {},
+        "duration_minutes": 20,
+        "description": "[Voice log] Duration: 20 min. Inspected, no parts used"
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Inspected air compressor number two. No parts used, twenty minutes, everything looks good.",
+          "agent": "I have Air Compressor #02, 20 minutes, no parts. Notes: Inspected, no parts used. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "air compressor number two",
+                "parts": [],
+                "duration_minutes": 20,
+                "notes": "Inspected, no parts used"
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Air Compressor #02, 20 minutes, no parts. Notes: Inspected, no parts used",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2506,
+            "ttsMs": 728,
+            "totalMs": 3276
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 7.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 7
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 769,
+            "totalMs": 789
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c04-clean-generator",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #03",
+        "parts": {
+          "Spark Plugs": 2
+        },
+        "duration_minutes": 35
+      },
+      "submitted": {
+        "equipment": "Generator #03",
+        "parts": {
+          "Spark Plugs": 2
+        },
+        "duration_minutes": 35,
+        "description": "[Voice log] Duration: 35 min. Tune-up on generator three. Replaced two spark plugs, thirty-five minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Tune-up on generator three. Replaced two spark plugs, thirty-five minutes.",
+          "agent": "I have Generator #03, 35 minutes, 2 Spark Plugs. Notes: Tune-up on generator three. Replaced two spark plugs, thirty-five minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "generator three",
+                "duration_minutes": 35,
+                "parts": [
+                  {
+                    "part": "spark plug",
+                    "quantity": 2
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Generator #03, 35 minutes, 2 Spark Plugs. Notes: Tune-up on generator three. Replaced two spark plugs, thirty-five minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2544,
+            "ttsMs": 800,
+            "totalMs": 3384
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 8.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 8
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 679,
+            "totalMs": 716
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c05-clean-mixer",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Concrete Mixer #01",
+        "parts": {
+          "Replacement Chains": 1
+        },
+        "duration_minutes": 120
+      },
+      "submitted": {
+        "equipment": "Concrete Mixer #01",
+        "parts": {
+          "Replacement Chains": 1
+        },
+        "duration_minutes": 120,
+        "description": "[Voice log] Duration: 120 min. Replaced stretched drive chain."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "unknown_part"
+      ],
+      "unexpectedQuestions": 1,
+      "turns": [
+        {
+          "user": "Concrete mixer one, the drive chain was stretched so I put on one replacement chain. Two hours.",
+          "agent": "\"Drive chain\" isn't in the parts list. Did you mean Drive Belts or Replacement Chains?",
+          "tools": [
+            {
+              "name": "find_equipment",
+              "args": {
+                "query": "Concrete mixer one"
+              },
+              "result": {
+                "status": "resolved",
+                "equipment": {
+                  "id": 12,
+                  "name": "Concrete Mixer #01",
+                  "location": "Garage Storage #6"
+                }
+              }
+            },
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Concrete Mixer #01",
+                "parts": [
+                  {
+                    "part": "Drive chain",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 120,
+                "notes": "Replaced stretched drive chain."
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_part",
+                    "question": "\"Drive chain\" isn't in the parts list. Did you mean Drive Belts or Replacement Chains?",
+                    "options": [
+                      "Drive Belts",
+                      "Replacement Chains"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 4672,
+            "ttsMs": 821,
+            "totalMs": 5608
+          },
+          "llmCalls": 2,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "I have Concrete Mixer #01, 120 minutes, 1 Replacement Chains. Notes: Replaced stretched drive chain.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 120,
+                "equipment": "Concrete Mixer #01",
+                "notes": "Replaced stretched drive chain.",
+                "parts": [
+                  {
+                    "part": "Replacement Chains",
+                    "quantity": 1
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Concrete Mixer #01, 120 minutes, 1 Replacement Chains. Notes: Replaced stretched drive chain.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3374,
+            "ttsMs": 797,
+            "totalMs": 4249
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 9.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 9
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 650,
+            "totalMs": 677
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c06-clean-welder",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Welding Machine #02",
+        "parts": {
+          "Welding Tips": 3
+        },
+        "duration_minutes": 15
+      },
+      "submitted": {
+        "equipment": "Welding Machine #02",
+        "parts": {
+          "Welding Tips": 3
+        },
+        "duration_minutes": 15,
+        "description": "[Voice log] Duration: 15 min. Welding machine two, swapped three welding tips, fifteen minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Welding machine two, swapped three welding tips, fifteen minutes.",
+          "agent": "I have Welding Machine #02, 15 minutes, 3 Welding Tips. Notes: Welding machine two, swapped three welding tips, fifteen minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Welding machine two",
+                "duration_minutes": 15,
+                "parts": [
+                  {
+                    "part": "welding tip",
+                    "quantity": 3
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Welding Machine #02, 15 minutes, 3 Welding Tips. Notes: Welding machine two, swapped three welding tips, fifteen minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2811,
+            "ttsMs": 794,
+            "totalMs": 3675
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 10.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 10
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 651,
+            "totalMs": 675
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c07-clean-drill",
+      "mode": "text",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Cordless Drill #02",
+        "parts": {
+          "Power Tool Batteries": 1
+        },
+        "duration_minutes": 10
+      },
+      "submitted": null,
+      "submissions": 0,
+      "fields": null,
+      "correct": false,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 7,
+      "issueCodesSeen": [
+        "ambiguous_equipment",
+        "unknown_part"
+      ],
+      "unexpectedQuestions": 7,
+      "turns": [
+        {
+          "user": "Cordless drill two wouldn't hold a charge. Put in one new power tool battery, ten minutes.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Cordless drill",
+                "parts": [
+                  {
+                    "part": "power tool battery",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 10
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_equipment",
+                    "question": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+                    "options": [
+                      "Cordless Drill #01",
+                      "Cordless Drill #02",
+                      "Cordless Drill #03"
+                    ]
+                  },
+                  {
+                    "code": "unknown_part",
+                    "question": "\"power tool battery\" isn't in the parts list. Did you mean Power Tool Batteries?",
+                    "options": [
+                      "Power Tool Batteries"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2736,
+            "ttsMs": 771,
+            "totalMs": 3553
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3072,
+            "ttsMs": 774,
+            "totalMs": 3847
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2074,
+            "ttsMs": 943,
+            "totalMs": 3017
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2129,
+            "ttsMs": 777,
+            "totalMs": 2907
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2136,
+            "ttsMs": 803,
+            "totalMs": 2939
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2077,
+            "ttsMs": 804,
+            "totalMs": 2881
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "There are 3 matches for \"Cordless drill\": Cordless Drill #01, Cordless Drill #02 or Cordless Drill #03. Which one was it?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2110,
+            "ttsMs": 736,
+            "totalMs": 2845
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c08-ambiguous-generator",
+      "mode": "text",
+      "category": "ambiguous_equipment",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 30
+      },
+      "submitted": {
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 30,
+        "description": "[Voice log] Duration: 30 min. Changed one air filter"
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "ambiguous_equipment"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Changed one air filter on the generator, thirty minutes.",
+          "agent": "There are 3 matches for \"generator\": Generator #01, Generator #02 or Generator #03. Which one was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "notes": "Changed one air filter",
+                "parts": [
+                  {
+                    "part": "air filter",
+                    "quantity": 1
+                  }
+                ],
+                "equipment": "generator",
+                "duration_minutes": 30
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_equipment",
+                    "question": "There are 3 matches for \"generator\": Generator #01, Generator #02 or Generator #03. Which one was it?",
+                    "options": [
+                      "Generator #01",
+                      "Generator #02",
+                      "Generator #03"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2960,
+            "ttsMs": 808,
+            "totalMs": 3868
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Generator two.",
+          "agent": "I have Generator #02, 30 minutes, 1 Air Filters. Notes: Changed one air filter. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 30,
+                "equipment": "Generator #02",
+                "notes": "Changed one air filter",
+                "parts": [
+                  {
+                    "part": "air filter",
+                    "quantity": 1
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Generator #02, 30 minutes, 1 Air Filters. Notes: Changed one air filter",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3215,
+            "ttsMs": 761,
+            "totalMs": 4045
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 11.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 11
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 631,
+            "totalMs": 657
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c09-ambiguous-pump",
+      "mode": "text",
+      "category": "ambiguous_equipment",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Water Pump #02",
+        "parts": {
+          "Hydraulic Hoses": 1
+        },
+        "duration_minutes": 50
+      },
+      "submitted": {
+        "equipment": "Water Pump #02",
+        "parts": {
+          "Hydraulic Hoses": 1
+        },
+        "duration_minutes": 50,
+        "description": "[Voice log] Duration: 50 min. Replaced a hydraulic hose on the water pump, about fifty minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "ambiguous_equipment"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Replaced a hydraulic hose on the water pump, about fifty minutes.",
+          "agent": "There are 2 matches for \"water pump\": Water Pump #01 or Water Pump #02. Which one was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 50,
+                "parts": [
+                  {
+                    "part": "hydraulic hose",
+                    "quantity": 1
+                  }
+                ],
+                "equipment": "water pump"
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_equipment",
+                    "question": "There are 2 matches for \"water pump\": Water Pump #01 or Water Pump #02. Which one was it?",
+                    "options": [
+                      "Water Pump #01",
+                      "Water Pump #02"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2584,
+            "ttsMs": 814,
+            "totalMs": 3468
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Water pump number two.",
+          "agent": "I have Water Pump #02, 50 minutes, 1 Hydraulic Hoses. Notes: Replaced a hydraulic hose on the water pump, about fifty minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Water Pump #02",
+                "parts": [
+                  {
+                    "part": "hydraulic hose",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 50
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Water Pump #02, 50 minutes, 1 Hydraulic Hoses. Notes: Replaced a hydraulic hose on the water pump, about fifty minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2901,
+            "ttsMs": 827,
+            "totalMs": 3796
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 12.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 12
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 632,
+            "totalMs": 658
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c10-ambiguous-filters",
+      "mode": "text",
+      "category": "ambiguous_part",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Air Compressor #01",
+        "parts": {
+          "Air Filters": 2
+        },
+        "duration_minutes": 25
+      },
+      "submitted": {
+        "equipment": "Air Compressor #01",
+        "parts": {
+          "Air Filters": 2
+        },
+        "duration_minutes": 25,
+        "description": "[Voice log] Duration: 25 min. Air compressor one, changed two filters, twenty-five minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "ambiguous_part"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Air compressor one, changed two filters, twenty-five minutes.",
+          "agent": "Which part did you mean by \"Filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Air compressor one",
+                "duration_minutes": 25,
+                "parts": [
+                  {
+                    "part": "Filter",
+                    "quantity": 2
+                  }
+                ]
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_part",
+                    "question": "Which part did you mean by \"Filter\": Oil Filters, Air Filters or Respirator Filters?",
+                    "options": [
+                      "Oil Filters",
+                      "Air Filters",
+                      "Respirator Filters"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2495,
+            "ttsMs": 772,
+            "totalMs": 3322
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Air filters.",
+          "agent": "I have Air Compressor #01, 25 minutes, 2 Air Filters. Notes: Air compressor one, changed two filters, twenty-five minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 25,
+                "equipment": "Air compressor one",
+                "parts": [
+                  {
+                    "part": "Air Filters",
+                    "quantity": 2
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Air Compressor #01, 25 minutes, 2 Air Filters. Notes: Air compressor one, changed two filters, twenty-five minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2648,
+            "ttsMs": 877,
+            "totalMs": 3581
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 13.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 13
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 657,
+            "totalMs": 680
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c11-unknown-part",
+      "mode": "text",
+      "category": "unknown_part",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Rotary Hammer #01",
+        "parts": {},
+        "duration_minutes": 30
+      },
+      "submitted": {
+        "equipment": "Rotary Hammer #01",
+        "parts": {},
+        "duration_minutes": 30,
+        "description": "[Voice log] Duration: 30 min. Rotary hammer one, replaced the carbon brushes, two of them, thirty minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "unknown_part"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Rotary hammer one, replaced the carbon brushes, two of them, thirty minutes.",
+          "agent": "\"carbon brushes\" isn't in the parts list. What part was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Rotary hammer one",
+                "parts": [
+                  {
+                    "part": "carbon brushes",
+                    "quantity": 2
+                  }
+                ],
+                "duration_minutes": 30
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_part",
+                    "question": "\"carbon brushes\" isn't in the parts list. What part was it?",
+                    "options": []
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2624,
+            "ttsMs": 787,
+            "totalMs": 3455
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Those were my own spares. Log it with no parts.",
+          "agent": "I have Rotary Hammer #01, 30 minutes, no parts. Notes: Rotary hammer one, replaced the carbon brushes, two of them, thirty minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "parts": [],
+                "duration_minutes": 30,
+                "equipment": "Rotary hammer one"
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Rotary Hammer #01, 30 minutes, no parts. Notes: Rotary hammer one, replaced the carbon brushes, two of them, thirty minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2307,
+            "ttsMs": 894,
+            "totalMs": 3282
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 14.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 14
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 649,
+            "totalMs": 675
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c12-unknown-equipment",
+      "mode": "text",
+      "category": "unknown_equipment",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Plate Compactor #01",
+        "parts": {
+          "Bearings": 1
+        },
+        "duration_minutes": 40
+      },
+      "submitted": {
+        "equipment": "Plate Compactor #01",
+        "parts": {
+          "Bearings": 1
+        },
+        "duration_minutes": 40,
+        "description": "[Voice log] Duration: 40 min. Fixed the forklift, replaced one bearing, forty minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "unknown_equipment"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Fixed the forklift, replaced one bearing, forty minutes.",
+          "agent": "I can't find any equipment called \"forklift\". What's the name on the asset tag?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "forklift",
+                "duration_minutes": 40,
+                "parts": [
+                  {
+                    "part": "bearing",
+                    "quantity": 1
+                  }
+                ]
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_equipment",
+                    "question": "I can't find any equipment called \"forklift\". What's the name on the asset tag?",
+                    "options": []
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2509,
+            "ttsMs": 928,
+            "totalMs": 3474
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Sorry, it was the plate compactor.",
+          "agent": "I have Plate Compactor #01, 40 minutes, 1 Bearings. Notes: Fixed the forklift, replaced one bearing, forty minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 40,
+                "equipment": "plate compactor",
+                "parts": [
+                  {
+                    "part": "bearing",
+                    "quantity": 1
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Plate Compactor #01, 40 minutes, 1 Bearings. Notes: Fixed the forklift, replaced one bearing, forty minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2587,
+            "ttsMs": 848,
+            "totalMs": 3500
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 15.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 15
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 663,
+            "totalMs": 688
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c13-short-belts",
+      "mode": "text",
+      "category": "insufficient_stock",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #01",
+        "parts": {},
+        "duration_minutes": 60
+      },
+      "submitted": {
+        "equipment": "Generator #01",
+        "parts": {},
+        "duration_minutes": 60,
+        "description": "[Voice log] Duration: 60 min. Generator one, replaced three drive belts, one hour."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "insufficient_stock"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Generator one, replaced three drive belts, one hour.",
+          "agent": "The system shows only 1 Drive Belts in stock, but you said 3. How many did you actually use?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Generator one",
+                "duration_minutes": 60,
+                "parts": [
+                  {
+                    "part": "Drive belt",
+                    "quantity": 3
+                  }
+                ]
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "insufficient_stock",
+                    "question": "The system shows only 1 Drive Belts in stock, but you said 3. How many did you actually use?",
+                    "options": [
+                      "Drive Belts"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2433,
+            "ttsMs": 828,
+            "totalMs": 3304
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Then leave the belts off. They came from the truck stock.",
+          "agent": "I have Generator #01, 60 minutes, no parts. Notes: Generator one, replaced three drive belts, one hour.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 60,
+                "equipment": "Generator one",
+                "parts": []
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Generator #01, 60 minutes, no parts. Notes: Generator one, replaced three drive belts, one hour.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2320,
+            "ttsMs": 782,
+            "totalMs": 3170
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 16.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 16
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 667,
+            "totalMs": 689
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c14-short-discs",
+      "mode": "text",
+      "category": "insufficient_stock",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Angle Grinder #02",
+        "parts": {},
+        "duration_minutes": 20
+      },
+      "submitted": {
+        "equipment": "Angle Grinder #01",
+        "parts": {
+          "Grinding Discs": 3
+        },
+        "duration_minutes": 20,
+        "description": "[Voice log] Duration: 20 min. Angle grinder two, went through ten grinding discs, twenty minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": false,
+        "parts": false,
+        "duration_minutes": true
+      },
+      "correct": false,
+      "wrongSubmission": true,
+      "clarifyingQuestions": 2,
+      "issueCodesSeen": [
+        "ambiguous_equipment",
+        "insufficient_stock"
+      ],
+      "unexpectedQuestions": 2,
+      "turns": [
+        {
+          "user": "Angle grinder two, went through ten grinding discs, twenty minutes.",
+          "agent": "There are 3 matches for \"Angle grinder\": Angle Grinder #01, Angle Grinder #02 or Angle Grinder #03. Which one was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 20,
+                "equipment": "Angle grinder",
+                "parts": [
+                  {
+                    "part": "grinding disc",
+                    "quantity": 10
+                  }
+                ]
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_equipment",
+                    "question": "There are 3 matches for \"Angle grinder\": Angle Grinder #01, Angle Grinder #02 or Angle Grinder #03. Which one was it?",
+                    "options": [
+                      "Angle Grinder #01",
+                      "Angle Grinder #02",
+                      "Angle Grinder #03"
+                    ]
+                  },
+                  {
+                    "code": "insufficient_stock",
+                    "question": "The system shows only 3 Grinding Discs in stock, but you said 10. How many did you actually use?",
+                    "options": [
+                      "Grinding Discs"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2791,
+            "ttsMs": 835,
+            "totalMs": 3689
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "There are 3 matches for \"Angle grinder\": Angle Grinder #01, Angle Grinder #02 or Angle Grinder #03. Which one was it? How many grinding discs did you actually use?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3345,
+            "ttsMs": 909,
+            "totalMs": 4254
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "I have Angle Grinder #01, 20 minutes, 3 Grinding Discs. Notes: Angle grinder two, went through ten grinding discs, twenty minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 20,
+                "equipment": "Angle Grinder #01",
+                "parts": [
+                  {
+                    "part": "grinding disc",
+                    "quantity": 3
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Angle Grinder #01, 20 minutes, 3 Grinding Discs. Notes: Angle grinder two, went through ten grinding discs, twenty minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2266,
+            "ttsMs": 825,
+            "totalMs": 3177
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 17.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 17
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 713,
+            "totalMs": 740
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c15-missing-duration",
+      "mode": "text",
+      "category": "missing_field",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Shop Vacuum #01",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 15
+      },
+      "submitted": {
+        "equipment": "Shop Vacuum #01",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 30,
+        "description": "[Voice log] Duration: 30 min. Replaced the air filter."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": false
+      },
+      "correct": false,
+      "wrongSubmission": true,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Shop vacuum one, replaced the air filter, just one.",
+          "agent": "I have Shop Vacuum #01, 30 minutes, 1 Air Filters. Notes: Replaced the air filter.. Should I submit it?",
+          "tools": [
+            {
+              "name": "find_equipment",
+              "args": {
+                "query": "Shop vacuum one"
+              },
+              "result": {
+                "status": "resolved",
+                "equipment": {
+                  "id": 40,
+                  "name": "Shop Vacuum #01",
+                  "location": "Garage Storage #6"
+                }
+              }
+            },
+            {
+              "name": "check_part_stock",
+              "args": {
+                "part": "Air filter",
+                "quantity": 1
+              },
+              "result": {
+                "status": "resolved",
+                "part": {
+                  "id": 7,
+                  "name": "Air Filters",
+                  "in_stock": 23
+                },
+                "enough": true
+              }
+            },
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Shop Vacuum #01",
+                "parts": [
+                  {
+                    "part": "Air Filters",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 30,
+                "notes": "Replaced the air filter."
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Shop Vacuum #01, 30 minutes, 1 Air Filters. Notes: Replaced the air filter.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 5959,
+            "ttsMs": 832,
+            "totalMs": 6928
+          },
+          "llmCalls": 3,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 18.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 18
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 771,
+            "totalMs": 801
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c16-missing-equipment",
+      "mode": "text",
+      "category": "missing_field",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "Hose Clamps": 2
+        },
+        "duration_minutes": 10
+      },
+      "submitted": {
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "Hose Clamps": 2
+        },
+        "duration_minutes": 10,
+        "description": "[Voice log] Duration: 10 min. replaced loose hose clamps"
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 2,
+      "issueCodesSeen": [
+        "unknown_equipment"
+      ],
+      "unexpectedQuestions": 1,
+      "turns": [
+        {
+          "user": "Replaced two hose clamps, ten minutes, the hoses were loose.",
+          "agent": "I can't find any equipment called \"hoses\". What's the name on the asset tag?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "hoses",
+                "parts": [
+                  {
+                    "part": "hose clamps",
+                    "quantity": 2
+                  }
+                ],
+                "duration_minutes": 10,
+                "notes": "replaced loose hose clamps"
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_equipment",
+                    "question": "I can't find any equipment called \"hoses\". What's the name on the asset tag?",
+                    "options": []
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3243,
+            "ttsMs": 848,
+            "totalMs": 4152
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "Propose_log needs the equipment name clarified. Can you provide the name from the asset tag?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1798,
+            "ttsMs": 755,
+            "totalMs": 2552
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "The pressure washer.",
+          "agent": "I have Pressure Washer #01, 10 minutes, 2 Hose Clamps. Notes: replaced loose hose clamps. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 10,
+                "equipment": "pressure washer",
+                "notes": "replaced loose hose clamps",
+                "parts": [
+                  {
+                    "part": "hose clamps",
+                    "quantity": 2
+                  }
+                ]
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Pressure Washer #01, 10 minutes, 2 Hose Clamps. Notes: replaced loose hose clamps",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2631,
+            "ttsMs": 777,
+            "totalMs": 3474
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 19.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 19
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 709,
+            "totalMs": 736
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c17-correction-at-readback",
+      "mode": "text",
+      "category": "correction",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Laser Level #02",
+        "parts": {},
+        "duration_minutes": 30
+      },
+      "submitted": {
+        "equipment": "Laser Level #02",
+        "parts": {},
+        "duration_minutes": 30,
+        "description": "[Voice log] Duration: 30 min. Calibration check"
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Laser level one, calibration check, no parts, thirty minutes.",
+          "agent": "I have Laser Level #01, 30 minutes, no parts. Notes: Calibration check. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "notes": "Calibration check",
+                "equipment": "Laser level one",
+                "parts": [],
+                "duration_minutes": 30
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Laser Level #01, 30 minutes, no parts. Notes: Calibration check",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2379,
+            "ttsMs": 724,
+            "totalMs": 3171
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "No, it was laser level two.",
+          "agent": "I have Laser Level #02, 30 minutes, no parts. Notes: Calibration check. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "notes": "Calibration check",
+                "parts": [],
+                "duration_minutes": 30,
+                "equipment": "Laser level two"
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Laser Level #02, 30 minutes, no parts. Notes: Calibration check",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2789,
+            "ttsMs": 837,
+            "totalMs": 3680
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 20.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 20
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 681,
+            "totalMs": 706
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c18-duplicate-part",
+      "mode": "text",
+      "category": "duplicate_part",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Nail Gun #01",
+        "parts": {
+          "O-Ring Seals": 3
+        },
+        "duration_minutes": 20
+      },
+      "submitted": {
+        "equipment": "Nail Gun #01",
+        "parts": {
+          "O-Ring Seals": 3
+        },
+        "duration_minutes": 20,
+        "description": "[Voice log] Duration: 20 min. Nail gun one, used two O-ring seals, and then one more O-ring seal, twenty minutes."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Nail gun one, used two O-ring seals, and then one more O-ring seal, twenty minutes.",
+          "agent": "I have Nail Gun #01, 20 minutes, 3 O-Ring Seals. Notes: Nail gun one, used two O-ring seals, and then one more O-ring seal, twenty minutes.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Nail gun one",
+                "parts": [
+                  {
+                    "part": "O-ring seal",
+                    "quantity": 3
+                  }
+                ],
+                "duration_minutes": 20
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Nail Gun #01, 20 minutes, 3 O-Ring Seals. Notes: Nail gun one, used two O-ring seals, and then one more O-ring seal, twenty minutes.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2615,
+            "ttsMs": 873,
+            "totalMs": 3531
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 21.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 21
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 736,
+            "totalMs": 765
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c19-cancel",
+      "mode": "text",
+      "category": "cancel",
+      "mistake": true,
+      "expected": {
+        "submit": false
+      },
+      "submitted": null,
+      "submissions": 0,
+      "fields": null,
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Tile cutter one, replaced the blade, one saw blade, ten minutes.",
+          "agent": "I have Tile Cutter #01, 10 minutes, 1 Saw Blades. Notes: Replaced the blade. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "notes": "Replaced the blade",
+                "equipment": "Tile cutter one",
+                "parts": [
+                  {
+                    "part": "Saw blade",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 10
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Tile Cutter #01, 10 minutes, 1 Saw Blades. Notes: Replaced the blade",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3014,
+            "ttsMs": 831,
+            "totalMs": 3895
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "No, cancel that. I already logged it on paper.",
+          "agent": "Okay, I won't save it. Nothing was submitted.",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 695,
+            "totalMs": 695
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c20-multi-issue",
+      "mode": "text",
+      "category": "multi_issue",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 60
+      },
+      "submitted": null,
+      "submissions": 0,
+      "fields": null,
+      "correct": false,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 7,
+      "issueCodesSeen": [
+        "unknown_equipment",
+        "insufficient_stock",
+        "ambiguous_part"
+      ],
+      "unexpectedQuestions": 7,
+      "turns": [
+        {
+          "user": "Generator service, used two drive belts and one filter, an hour.",
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Generator service",
+                "parts": [
+                  {
+                    "part": "drive belt",
+                    "quantity": 2
+                  },
+                  {
+                    "part": "filter",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 60
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_equipment",
+                    "question": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+                    "options": [
+                      "Generator #01",
+                      "Generator #02",
+                      "Generator #03"
+                    ]
+                  },
+                  {
+                    "code": "insufficient_stock",
+                    "question": "The system shows only 1 Drive Belts in stock, but you said 2. How many did you actually use?",
+                    "options": [
+                      "Drive Belts"
+                    ]
+                  },
+                  {
+                    "code": "ambiguous_part",
+                    "question": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+                    "options": [
+                      "Oil Filters",
+                      "Air Filters",
+                      "Respirator Filters"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3100,
+            "ttsMs": 850,
+            "totalMs": 4007
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "The system shows only 1 Drive Belt in stock, but you said 2. How many did you actually use? Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3602,
+            "ttsMs": 854,
+            "totalMs": 4456
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1512,
+            "ttsMs": 776,
+            "totalMs": 2289
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1141,
+            "ttsMs": 858,
+            "totalMs": 2000
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "The system shows only 1 Drive Belt in stock, but you said 2. How many did you actually use?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1467,
+            "ttsMs": 869,
+            "totalMs": 2337
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1171,
+            "ttsMs": 763,
+            "totalMs": 1935
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1640,
+            "ttsMs": 782,
+            "totalMs": 2421
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c01-clean-washer",
+      "mode": "audio",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "O-Ring Seals": 2,
+          "Hose Clamps": 1
+        },
+        "duration_minutes": 40
+      },
+      "submitted": {
+        "equipment": "Pressure Washer #01",
+        "parts": {
+          "O-Ring Seals": 2,
+          "Hose Clamps": 1
+        },
+        "duration_minutes": 40,
+        "description": "[Voice log] Duration: 40 min. Pump seals were leaking."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Finished the service on the pressure washer, swapped two O-ring seals and one hose clamped, took about 40 minutes, the pump seals were leaking.",
+          "wer": 0.091,
+          "agent": "I have Pressure Washer #01, 40 minutes, 2 O-Ring Seals, 1 Hose Clamps. Notes: Pump seals were leaking.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "pressure washer",
+                "parts": [
+                  {
+                    "part": "O-ring seal",
+                    "quantity": 2
+                  },
+                  {
+                    "part": "hose clamp",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 40,
+                "notes": "Pump seals were leaking."
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Pressure Washer #01, 40 minutes, 2 O-Ring Seals, 1 Hose Clamps. Notes: Pump seals were leaking.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 2019,
+            "llmMs": 3924,
+            "ttsMs": 858,
+            "totalMs": 6848
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 22.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 22
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 706,
+            "totalMs": 732
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c02-clean-pump",
+      "mode": "audio",
+      "category": "clean",
+      "mistake": false,
+      "expected": {
+        "submit": true,
+        "equipment": "Water Pump #01",
+        "parts": {
+          "Bearings": 2
+        },
+        "duration_minutes": 90
+      },
+      "submitted": {
+        "equipment": "Water Pump #01",
+        "parts": {
+          "Bearings": 2
+        },
+        "duration_minutes": 90,
+        "description": "[Voice log] Duration: 90 min. Replaced two bearings. Bearing noise is gone."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Water pump 1, replaced two bearings, took an hour and a half, bearing noise is gone.",
+          "wer": 0,
+          "agent": "I have Water Pump #01, 90 minutes, 2 Bearings. Notes: Replaced two bearings. Bearing noise is gone.. Should I submit it?",
+          "tools": [
+            {
+              "name": "find_equipment",
+              "args": {
+                "query": "Water pump 1"
+              },
+              "result": {
+                "status": "resolved",
+                "equipment": {
+                  "id": 17,
+                  "name": "Water Pump #01",
+                  "location": "Garage Storage #1"
+                }
+              }
+            },
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Water Pump #01",
+                "parts": [
+                  {
+                    "part": "Bearing",
+                    "quantity": 2
+                  }
+                ],
+                "duration_minutes": 90,
+                "notes": "Replaced two bearings. Bearing noise is gone."
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Water Pump #01, 90 minutes, 2 Bearings. Notes: Replaced two bearings. Bearing noise is gone.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 1553,
+            "llmMs": 4900,
+            "ttsMs": 802,
+            "totalMs": 7349
+          },
+          "llmCalls": 2,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 23.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 23
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 688,
+            "totalMs": 714
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c08-ambiguous-generator",
+      "mode": "audio",
+      "category": "ambiguous_equipment",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 30
+      },
+      "submitted": {
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 30,
+        "description": "[Voice log] Duration: 30 min. Changed one air filter"
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "ambiguous_equipment"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Changed one air filter on the Generator, 30 minutes.",
+          "wer": 0.125,
+          "agent": "There are 3 matches for \"Generator\": Generator #01, Generator #02 or Generator #03. Which one was it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Generator",
+                "duration_minutes": 30,
+                "notes": "Changed one air filter",
+                "parts": [
+                  {
+                    "part": "air filter",
+                    "quantity": 1
+                  }
+                ]
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "ambiguous_equipment",
+                    "question": "There are 3 matches for \"Generator\": Generator #01, Generator #02 or Generator #03. Which one was it?",
+                    "options": [
+                      "Generator #01",
+                      "Generator #02",
+                      "Generator #03"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 1536,
+            "llmMs": 2921,
+            "ttsMs": 827,
+            "totalMs": 5353
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Generator two.",
+          "agent": "I have Generator #02, 30 minutes, 1 Air Filters. Notes: Changed one air filter. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "notes": "Changed one air filter",
+                "parts": [
+                  {
+                    "part": "air filter",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 30,
+                "equipment": "Generator #02"
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Generator #02, 30 minutes, 1 Air Filters. Notes: Changed one air filter",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3173,
+            "ttsMs": 853,
+            "totalMs": 4076
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 24.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 24
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 843,
+            "totalMs": 866
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c13-short-belts",
+      "mode": "audio",
+      "category": "insufficient_stock",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #01",
+        "parts": {},
+        "duration_minutes": 60
+      },
+      "submitted": {
+        "equipment": "Generator #01",
+        "parts": {},
+        "duration_minutes": 60,
+        "description": "[Voice log] Duration: 60 min. Generator 1, replace 3 drive belts, 1 hour."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 1,
+      "issueCodesSeen": [
+        "insufficient_stock"
+      ],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Generator 1, replace 3 drive belts, 1 hour.",
+          "wer": 0.125,
+          "agent": "The system shows only 1 Drive Belts in stock, but you said 3. How many did you actually use?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Generator 1",
+                "parts": [
+                  {
+                    "part": "drive belt",
+                    "quantity": 3
+                  }
+                ],
+                "duration_minutes": 60
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "insufficient_stock",
+                    "question": "The system shows only 1 Drive Belts in stock, but you said 3. How many did you actually use?",
+                    "options": [
+                      "Drive Belts"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 1540,
+            "llmMs": 2561,
+            "ttsMs": 762,
+            "totalMs": 4917
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "Then leave the belts off. They came from the truck stock.",
+          "agent": "I have Generator #01, 60 minutes, no parts. Notes: Generator 1, replace 3 drive belts, 1 hour.. Should I submit it?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "duration_minutes": 60,
+                "equipment": "Generator 1",
+                "parts": []
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Generator #01, 60 minutes, no parts. Notes: Generator 1, replace 3 drive belts, 1 hour.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2416,
+            "ttsMs": 797,
+            "totalMs": 3276
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 25.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 25
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 712,
+            "totalMs": 735
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c15-missing-duration",
+      "mode": "audio",
+      "category": "missing_field",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Shop Vacuum #01",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 15
+      },
+      "submitted": {
+        "equipment": "Shop Vacuum #01",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 15,
+        "description": "[Voice log] Duration: 15 min. Shop vacuum 1, replace the air filter, just 1."
+      },
+      "submissions": 1,
+      "fields": {
+        "equipment": true,
+        "parts": true,
+        "duration_minutes": true
+      },
+      "correct": true,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 0,
+      "issueCodesSeen": [],
+      "unexpectedQuestions": 0,
+      "turns": [
+        {
+          "user": "Shop vacuum 1, replace the air filter, just 1.",
+          "wer": 0.125,
+          "agent": "I have Shop Vacuum #01, 15 minutes, 1 Air Filters. Notes: Shop vacuum 1, replace the air filter, just 1.. Should I submit it?",
+          "tools": [
+            {
+              "name": "find_equipment",
+              "args": {
+                "query": "Shop vacuum 1"
+              },
+              "result": {
+                "status": "resolved",
+                "equipment": {
+                  "id": 40,
+                  "name": "Shop Vacuum #01",
+                  "location": "Garage Storage #6"
+                }
+              }
+            },
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Shop Vacuum #01",
+                "parts": [
+                  {
+                    "part": "Air filter",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 15
+              },
+              "result": {
+                "status": "awaiting_confirmation",
+                "summary": "Shop Vacuum #01, 15 minutes, 1 Air Filters. Notes: Shop vacuum 1, replace the air filter, just 1.",
+                "instruction": "The system will read this back and save it only if the technician says yes."
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 1516,
+            "llmMs": 4118,
+            "ttsMs": 885,
+            "totalMs": 6615
+          },
+          "llmCalls": 2,
+          "awaitingConfirmation": true
+        },
+        {
+          "user": "Yes.",
+          "agent": "Saved to MaintainOps as log number 26.",
+          "tools": [
+            {
+              "name": "submit_log",
+              "args": {},
+              "result": {
+                "status": "submitted",
+                "maintainops_log_id": 26
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 0,
+            "ttsMs": 769,
+            "totalMs": 789
+          },
+          "llmCalls": 0,
+          "awaitingConfirmation": false
+        }
+      ]
+    },
+    {
+      "id": "c20-multi-issue",
+      "mode": "audio",
+      "category": "multi_issue",
+      "mistake": true,
+      "expected": {
+        "submit": true,
+        "equipment": "Generator #02",
+        "parts": {
+          "Air Filters": 1
+        },
+        "duration_minutes": 60
+      },
+      "submitted": null,
+      "submissions": 0,
+      "fields": null,
+      "correct": false,
+      "wrongSubmission": false,
+      "clarifyingQuestions": 7,
+      "issueCodesSeen": [
+        "unknown_equipment",
+        "insufficient_stock",
+        "ambiguous_part"
+      ],
+      "unexpectedQuestions": 7,
+      "turns": [
+        {
+          "user": "Generator service, used two drive belts and one filter, an hour.",
+          "wer": 0,
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [
+            {
+              "name": "propose_log",
+              "args": {
+                "equipment": "Generator service",
+                "parts": [
+                  {
+                    "part": "drive belt",
+                    "quantity": 2
+                  },
+                  {
+                    "part": "filter",
+                    "quantity": 1
+                  }
+                ],
+                "duration_minutes": 60
+              },
+              "result": {
+                "status": "needs_clarification",
+                "issues": [
+                  {
+                    "code": "unknown_equipment",
+                    "question": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+                    "options": [
+                      "Generator #01",
+                      "Generator #02",
+                      "Generator #03"
+                    ]
+                  },
+                  {
+                    "code": "insufficient_stock",
+                    "question": "The system shows only 1 Drive Belts in stock, but you said 2. How many did you actually use?",
+                    "options": [
+                      "Drive Belts"
+                    ]
+                  },
+                  {
+                    "code": "ambiguous_part",
+                    "question": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+                    "options": [
+                      "Oil Filters",
+                      "Air Filters",
+                      "Respirator Filters"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "timings": {
+            "sttMs": 3698,
+            "llmMs": 3029,
+            "ttsMs": 911,
+            "totalMs": 7692
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's all I've got.",
+          "agent": "The system shows only 1 Drive Belt in stock, but you said 2. How many did you actually use? Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 3668,
+            "ttsMs": 996,
+            "totalMs": 4664
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1612,
+            "ttsMs": 773,
+            "totalMs": 2385
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1151,
+            "ttsMs": 763,
+            "totalMs": 1914
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "The system shows only 1 Drive Belt in stock, but you said 2. How many did you actually use?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1365,
+            "ttsMs": 757,
+            "totalMs": 2123
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "Which part did you mean by \"filter\": Oil Filters, Air Filters or Respirator Filters?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 1103,
+            "ttsMs": 1007,
+            "totalMs": 2110
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        },
+        {
+          "user": "That's everything.",
+          "agent": "I can't find equipment called \"Generator service\". Did you mean Generator #01, Generator #02 or Generator #03?",
+          "tools": [],
+          "timings": {
+            "sttMs": 0,
+            "llmMs": 2557,
+            "ttsMs": 2303,
+            "totalMs": 4861
+          },
+          "llmCalls": 1,
+          "awaitingConfirmation": false
+        }
+      ]
+    }
+  ]
+}
