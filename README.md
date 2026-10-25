@@ -18,8 +18,9 @@ first and saves nothing until the technician says yes.
 - **Eval: 26 scripted logs plus 6 audio clips, 3 runs, all reported.** The final run had 32 of
   32 conversations end correctly, 0 wrong logs written and all 21 deliberate mistakes caught.
   The first run wrote 3 wrong logs; "What broke" below covers what changed in between.
-- **63 vitest tests**, 3 of them against a live MaintainOps, plus a Dockerfile and a
-  GitHub Actions workflow
+- **63 vitest tests**, 3 of them against a live MaintainOps. GitHub Actions runs them in three
+  jobs: unit tests and build, an integration job that starts MaintainOps from its own repo
+  with Docker Compose and runs the live tests against it, and a Docker image build
 
 ## How a log gets made
 
@@ -200,9 +201,6 @@ inherited it. It needed its own `vitest.config.ts`.
   there are no OpenAI numbers here.
 - **Real human speech.** The audio clips are synthesized. A person talking next to a running
   compressor is a different problem.
-- **The CI workflow.** `.github/workflows/ci.yml` (unit tests, typecheck, build, an integration
-  job that starts MaintainOps from its repo, and a Docker build) has never run, because this
-  isn't on GitHub yet. The same steps pass locally.
 - **Microphone recording in the page.** The record button uses `MediaRecorder`, and I haven't
   tried it with a live mic. I tested the page with typed turns (log #85 above). I tested audio
   through the same `/api/turn` endpoint by uploading a clip with curl: local Whisper
