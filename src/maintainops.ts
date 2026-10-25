@@ -19,10 +19,21 @@ export interface Part {
   reorder_threshold: number;
 }
 
+export interface Employee {
+  id: number;
+  name: string;
+  role: string;
+  active: boolean;
+}
+
 export interface MaintenanceLogCreate {
   equipment_id: number;
   description: string;
   parts_used: { part_id: number; quantity: number }[];
+  // Structured copies for backends that have real fields for them (Odoo).
+  // MaintainOps has neither, so they're also written into `description`.
+  duration_minutes?: number;
+  technician_id?: number | null;
 }
 
 export interface MaintenanceLogRead {
@@ -45,13 +56,16 @@ export type CreateLogResult =
   | { ok: true; log: MaintenanceLogRead }
   | { ok: false; status: number; detail: string; shortfalls?: Shortfall[] };
 
-export interface MaintainOpsApi {
+// What the agent needs from a maintenance system. MaintainOpsClient and
+// OdooBackend (src/odoo.ts) both implement it.
+export interface MaintenanceBackend {
   listEquipment(): Promise<Equipment[]>;
   listParts(): Promise<Part[]>;
+  listEmployees(): Promise<Employee[]>;
   createMaintenanceLog(body: MaintenanceLogCreate): Promise<CreateLogResult>;
 }
 
-export class MaintainOpsClient implements MaintainOpsApi {
+export class MaintainOpsClient implements MaintenanceBackend {
   constructor(private baseUrl: string, private fetchImpl: typeof fetch = fetch) {}
 
   private async getJson<T>(path: string): Promise<T> {
@@ -68,11 +82,15 @@ export class MaintainOpsClient implements MaintainOpsApi {
     return this.getJson<Part[]>("/parts");
   }
 
+  listEmployees() {
+    return this.getJson<Employee[]>("/employees");
+  }
+
   async createMaintenanceLog(body: MaintenanceLogCreate): Promise<CreateLogResult> {
     const res = await this.fetchImpl(`${this.baseUrl}/maintenance-logs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ equipment_id: body.equipment_id, description: body.description, parts_used: body.parts_used }),
     });
     const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
     if (res.status === 201) return { ok: true, log: data as unknown as MaintenanceLogRead };

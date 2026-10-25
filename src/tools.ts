@@ -1,4 +1,4 @@
-import type { Equipment, MaintainOpsApi, MaintenanceLogRead, Part } from "./maintainops.js";
+import type { Equipment, MaintenanceBackend, MaintenanceLogRead, Part } from "./maintainops.js";
 import { matchByName } from "./matching.js";
 import { canSubmit, type PendingProposal } from "./confirm.js";
 import {
@@ -32,6 +32,7 @@ export interface SessionState {
   lastUserUtterance: string;
   utterances: string[];
   cancelled: boolean;
+  technician: { id: number; name: string } | null;
   pending: (PendingProposal & { draft: ResolvedDraft }) | null;
   // Most recent draft the agent tried, resolved or not, for the UI.
   lastDraft: ResolvedDraft | null;
@@ -40,12 +41,13 @@ export interface SessionState {
 }
 
 export function newSessionState(): SessionState {
-  return { turn: 0, lastUserUtterance: "", utterances: [], cancelled: false, pending: null, lastDraft: null, lastIssues: [], submitted: null };
+  return { turn: 0, lastUserUtterance: "", utterances: [], cancelled: false, technician: null, pending: null, lastDraft: null, lastIssues: [], submitted: null };
 }
 
 export interface ToolContext {
-  api: MaintainOpsApi;
+  api: MaintenanceBackend;
   state: SessionState;
+  system?: string;
   onSubmitted?: (log: MaintenanceLogRead, draft: ResolvedDraft) => void | Promise<void>;
 }
 
@@ -199,7 +201,9 @@ export async function submitLog(ctx: ToolContext) {
 
   const result = await ctx.api.createMaintenanceLog({
     equipment_id: draft.equipment.id,
-    description: describeForMaintainOps(draft),
+    description: describeForMaintainOps(draft, ctx.state.technician),
+    duration_minutes: draft.duration_minutes,
+    technician_id: ctx.state.technician?.id ?? null,
     parts_used: draft.parts.map((p) => ({ part_id: p.id, quantity: p.quantity })),
   });
 
@@ -219,14 +223,14 @@ export async function submitLog(ctx: ToolContext) {
         const name = draft.parts.find((p) => p.id === s.part_id)?.name ?? `part ${s.part_id}`;
         return {
           code: "insufficient_stock" as const,
-          question: `MaintainOps rejected the log: only ${s.available} ${name} in stock, you said ${s.requested}. Nothing was saved. How many did you actually use?`,
+          question: `${ctx.system ?? "MaintainOps"} rejected the log: only ${s.available} ${name} in stock, you said ${s.requested}. Nothing was saved. How many did you actually use?`,
           options: [name],
         };
       })
     : [
         {
           code: "maintainops_rejected" as const,
-          question: `MaintainOps rejected the log (${result.status}: ${result.detail}). Nothing was saved. Can you check the details?`,
+          question: `${ctx.system ?? "MaintainOps"} rejected the log (${result.status}: ${result.detail}). Nothing was saved. Can you check the details?`,
         },
       ];
   ctx.state.lastIssues = issues;

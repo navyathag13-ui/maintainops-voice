@@ -29,11 +29,25 @@ interface TurnResponse {
 }
 interface HistoryEntry {
   maintainops_log_id: number;
+  system?: string;
+  technician: string | null;
   equipment: string;
   parts: { name: string; quantity: number }[];
   duration_minutes: number;
   notes: string;
   submitted_at: string;
+}
+interface Employee {
+  id: number;
+  name: string;
+  role: string;
+}
+interface ReviewItem {
+  at: string;
+  technician: string | null;
+  transcript: string;
+  reply: string;
+  reasons: string[];
 }
 interface Line {
   who: "tech" | "agent";
@@ -41,10 +55,22 @@ interface Line {
   ms?: number;
 }
 
-async function newSession(): Promise<string> {
-  const res = await fetch("/api/session", { method: "POST" });
+async function newSession(technicianId: number | null): Promise<string> {
+  const res = await fetch("/api/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ technicianId }),
+  });
   return ((await res.json()) as { sessionId: string }).sessionId;
 }
+
+const REASON_LABEL: Record<string, string> = {
+  readback_corrected: "read-back corrected",
+  rejected_by_maintainops: "rejected by MaintainOps",
+  save_claim_replaced: "model claimed a save",
+  stuck: "agent got stuck",
+  cancelled: "cancelled",
+};
 
 export function App() {
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -56,18 +82,32 @@ export function App() {
   const [busy, setBusy] = useState(false);
   const [typed, setTyped] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [technicianId, setTechnicianId] = useState<number | null>(null);
+  const [review, setReview] = useState<ReviewItem[]>([]);
+  const [system, setSystem] = useState("MaintainOps");
   const recorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
 
   const loadHistory = useCallback(async () => {
-    const res = await fetch("/api/history");
-    if (res.ok) setHistory(await res.json());
+    const [h, r] = await Promise.all([fetch("/api/history"), fetch("/api/review")]);
+    if (h.ok) setHistory(await h.json());
+    if (r.ok) setReview(await r.json());
   }, []);
 
   useEffect(() => {
-    newSession().then(setSessionId);
+    fetch("/api/employees").then(async (r) => r.ok && setEmployees(await r.json()));
+    fetch("/api/health").then(async (r) => r.ok && setSystem((await r.json()).system ?? "MaintainOps"));
     loadHistory();
   }, [loadHistory]);
+
+  // A new session whenever the technician changes; the server stamps their name on the log.
+  useEffect(() => {
+    newSession(technicianId).then(setSessionId);
+    setLines([]);
+    setDraft(null);
+    setIssues([]);
+  }, [technicianId]);
 
   async function send(form: FormData) {
     if (!sessionId) return;
@@ -87,8 +127,12 @@ export function App() {
       setDraft(turn.draft);
       setIssues(turn.issues);
       if (turn.submitted) {
-        setStatus(`Saved to MaintainOps as log #${turn.submitted.id}.`);
-        setSessionId(await newSession());
+        setStatus(`Saved to ${system} as record #${turn.submitted.id}.`);
+        setSessionId(await newSession(technicianId));
+        loadHistory();
+      } else if ((turn as TurnResponse & { cancelled?: boolean }).cancelled) {
+        setStatus("Cancelled. Nothing was saved.");
+        setSessionId(await newSession(technicianId));
         loadHistory();
       } else if (turn.awaitingConfirmation) {
         setStatus("Waiting for your confirmation. Say yes to submit or correct anything.");
@@ -148,10 +192,25 @@ export function App() {
     <main>
       <header>
         <h1>MaintainOps Voice</h1>
-        <p className="muted">Speak a maintenance log. It's checked against MaintainOps and read back before anything is saved.</p>
+        <p className="muted">Speak a maintenance log. It's checked against {system} and read back before anything is saved.</p>
       </header>
 
       <section className="controls">
+        <label className="tech">
+          Technician{" "}
+          <select
+            value={technicianId ?? ""}
+            onChange={(e) => setTechnicianId(e.target.value ? Number(e.target.value) : null)}
+            disabled={busy || recording}
+          >
+            <option value="">Not set</option>
+            {employees.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.name} ({e.role.replace("_", " ")})
+              </option>
+            ))}
+          </select>
+        </label>
         <button className={recording ? "rec on" : "rec"} onClick={toggleRecording} disabled={busy || !sessionId}>
           {recording ? "■ Stop" : "● Record"}
         </button>
@@ -214,13 +273,31 @@ export function App() {
       </div>
 
       <section className="card">
+        <h2>Needs review</h2>
+        {review.length === 0 && <p className="muted">Nothing flagged.</p>}
+        {review.map((r, i) => (
+          <div key={i} className="review">
+            <div>
+              {r.reasons.map((x) => (
+                <span key={x} className="tag">{REASON_LABEL[x] ?? x}</span>
+              ))}
+              <span className="muted"> {r.technician ?? "No technician"} · {new Date(r.at).toLocaleString()}</span>
+            </div>
+            <div><strong>Tech:</strong> {r.transcript}</div>
+            <div className="muted"><strong>Agent:</strong> {r.reply}</div>
+          </div>
+        ))}
+      </section>
+
+      <section className="card">
         <h2>Voice-submitted logs</h2>
         {history.length === 0 && <p className="muted">None yet.</p>}
         <table>
           <tbody>
             {history.map((h) => (
               <tr key={h.maintainops_log_id}>
-                <td>#{h.maintainops_log_id}</td>
+                <td>{h.system ?? "MaintainOps"} #{h.maintainops_log_id}</td>
+                <td>{h.technician ?? "—"}</td>
                 <td>{h.equipment}</td>
                 <td>{h.duration_minutes} min</td>
                 <td>{h.parts.map((p) => `${p.quantity} ${p.name}`).join(", ") || "No parts"}</td>

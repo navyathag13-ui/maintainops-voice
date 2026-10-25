@@ -8,15 +8,15 @@
 //   npm run eval -- --no-audio    text cases only
 //
 // Successful cases write real maintenance logs and consume real stock in MaintainOps.
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { basename, join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Agent } from "../src/agent.js";
 import { getConfig } from "../src/config.js";
 import { MaintainOpsClient, type MaintenanceLogCreate } from "../src/maintainops.js";
 import { runTurn } from "../src/pipeline.js";
-import { buildProviders } from "../src/providers.js";
+import { buildBackend, buildProviders } from "../src/providers.js";
 import { tokens } from "../src/matching.js";
 import { isConfirmation } from "../src/confirm.js";
 import { spokenSummary, type ResolvedDraft } from "../src/schema.js";
@@ -69,11 +69,12 @@ const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : undefined;
 const withAudio = !args.includes("--no-audio");
+const withReal = args.includes("--real");
 const MAX_TURNS = 7;
 
 const cfg = getConfig();
 const providers = buildProviders(cfg);
-const client = new MaintainOpsClient(cfg.maintainopsUrl);
+const { backend: client, label: backendLabel } = buildBackend(cfg);
 const speech = providers.speech;
 
 function wer(ref: string, hyp: string): number {
@@ -93,7 +94,9 @@ const pct = (xs: number[], p: number) => {
   return Math.round(s[Math.min(s.length - 1, Math.ceil((p / 100) * s.length) - 1)]);
 };
 
-async function runCase(c: Case, mode: "text" | "audio") {
+type Mode = "text" | "audio" | "real";
+
+async function runCase(c: Case, mode: Mode, audioPath?: string, speaker?: string) {
   const equipment = await client.listEquipment();
   const parts = await client.listParts();
   if (c.precondition) {
@@ -107,13 +110,14 @@ async function runCase(c: Case, mode: "text" | "audio") {
   const api = {
     listEquipment: () => client.listEquipment(),
     listParts: () => client.listParts(),
+    listEmployees: () => client.listEmployees(),
     createMaintenanceLog: async (b: MaintenanceLogCreate) => {
       const r = await client.createMaintenanceLog(b);
       if (r.ok) created.push(b);
       return r;
     },
   };
-  const agent = new Agent(providers.llm, api);
+  const agent = new Agent(providers.llm, api, undefined, cfg.backend === "odoo" ? "Odoo" : "MaintainOps");
   const confirmQueue = [...(c.answers.confirm ?? [])];
   const used = new Set<string>();
 
@@ -124,12 +128,12 @@ async function runCase(c: Case, mode: "text" | "audio") {
   const readbackCorrections: { heard: string }[] = [];
   const e = c.expected;
   let next: { text?: string; audioPath?: string } =
-    mode === "audio" ? { audioPath: join(here, "audio", `${c.id}.wav`) } : { text: c.utterance };
+    audioPath ? { audioPath } : { text: c.utterance };
 
   for (let t = 0; t < MAX_TURNS; t++) {
     const out = await runTurn(agent, speech, {
       text: next.text,
-      audio: next.audioPath ? { data: await readFile(next.audioPath), filename: `${c.id}.wav`, mimeType: "audio/wav" } : undefined,
+      audio: next.audioPath ? { data: await readFile(next.audioPath), filename: basename(next.audioPath), mimeType: "audio/*" } : undefined,
     });
     const turnIssues = out.toolCalls.flatMap((tc) => ((tc.result as { issues?: { code: string }[] })?.issues ?? []));
     turnIssues.forEach((i) => issueCodesSeen.add(i.code));
@@ -205,6 +209,7 @@ async function runCase(c: Case, mode: "text" | "audio") {
   return {
     id: c.id,
     mode,
+    speaker: speaker ?? null,
     category: c.category,
     mistake: !!c.mistake,
     expected: e,
@@ -226,21 +231,42 @@ async function main() {
   const cases = (JSON.parse(await readFile(join(here, "cases.json"), "utf8")) as Case[]).filter(
     (c) => !only || c.id.startsWith(only),
   );
-  const runs: { c: Case; mode: "text" | "audio" }[] = cases.map((c) => ({ c, mode: "text" as const }));
-  if (withAudio) for (const c of cases) if (existsSync(join(here, "audio", `${c.id}.wav`))) runs.push({ c, mode: "audio" });
+  const runs: { c: Case; mode: Mode; audioPath?: string; speaker?: string }[] = withReal ? [] : cases.map((c) => ({ c, mode: "text" as const }));
+  if (withAudio && !withReal) {
+    for (const c of cases) {
+      const p = join(here, "audio", `${c.id}.wav`);
+      if (existsSync(p)) runs.push({ c, mode: "audio", audioPath: p });
+    }
+  }
+  if (withReal) {
+    // eval/real/audio/<speaker>__<case id>.<ext>: recordings of real people.
+    const dir = join(here, "real", "audio");
+    for (const f of existsSync(dir) ? (await readdir(dir)).sort() : []) {
+      const m = f.match(/^(.+?)__(.+)\.(m4a|wav|mp3|webm|ogg)$/i);
+      const c = m && cases.find((x) => x.id === m[2]);
+      if (c) runs.push({ c, mode: "real", audioPath: join(dir, f), speaker: m![1] });
+      else if (f !== ".gitkeep") console.log(`skipping ${f}: expected <speaker>__<case id>.<ext> with a known case id`);
+    }
+    if (!runs.length) {
+      console.log("No recordings in eval/real/audio/ (see eval/real/README.md).");
+      providers.close?.();
+      return;
+    }
+  }
 
-  // Load the model once before timing anything. For Ollama the first call
-  // includes loading the weights into memory; it's reported, not averaged in.
+  // Load models once before timing anything (Whisper worker + Ollama weights
+  // in local mode). Reported, not averaged into per-turn latency.
   const w0 = performance.now();
-  await providers.llm.complete([{ role: "user", content: "Say ok." }], []);
+  if (providers.warm) await providers.warm();
+  else await providers.llm.complete([{ role: "user", content: "Say ok." }], []);
   const warmupMs = Math.round(performance.now() - w0);
-  console.log(`LLM warm-up: ${warmupMs} ms`);
+  console.log(`Warm-up: ${warmupMs} ms`);
 
   const results: Awaited<ReturnType<typeof runCase>>[] = [];
-  for (const { c, mode } of runs) {
+  for (const { c, mode, audioPath, speaker } of runs) {
     process.stdout.write(`${c.id} [${mode}] ... `);
     try {
-      const r = await runCase(c, mode);
+      const r = await runCase(c, mode, audioPath, speaker);
       results.push(r);
       console.log("skipped" in r ? r.skipped : r.correct ? "ok" : "WRONG");
     } catch (err) {
@@ -263,8 +289,9 @@ async function main() {
 
   const summary = {
     ran_at: new Date().toISOString(),
+    backend: backendLabel,
     models: providers.label,
-    llm_warmup_ms: warmupMs,
+    warmup_ms: warmupMs,
     runs: results.length,
     completed: done.length,
     skipped: results.filter((r) => "skipped" in r).map((r) => ({ id: r.id, mode: r.mode, why: (r as { skipped: string }).skipped })),
@@ -300,6 +327,15 @@ async function main() {
       stt_audio_turns: lat("sttMs", audioTurns),
       total_audio_turns: lat("totalMs", audioTurns),
     },
+    real_voice: withReal
+      ? Object.fromEntries(
+          [...new Set(done.map((r) => r.speaker))].map((sp) => {
+            const mine = done.filter((r) => r.speaker === sp);
+            const w = mine.map((r) => (r.turns[0] as { wer?: number }).wer ?? 0);
+            return [sp, { runs: mine.length, correct: mine.filter((r) => r.correct).length, wrong_submissions: mine.filter((r) => r.wrongSubmission).length, first_turn_wer_mean: Number((w.reduce((a, b) => a + b, 0) / w.length).toFixed(3)) }];
+          }),
+        )
+      : undefined,
     audio_wer_mean: audioTurns.length ? Number((audioTurns.reduce((s, t) => s + t.wer!, 0) / audioTurns.length).toFixed(3)) : null,
   };
 
@@ -308,6 +344,7 @@ async function main() {
   await writeFile(join(here, "results", `run-${stamp}.json`), JSON.stringify({ summary, results }, null, 2));
   await writeFile(join(here, "results", "latest-summary.json"), JSON.stringify(summary, null, 2));
   console.log(JSON.stringify(summary, null, 2));
+  providers.close?.();
 }
 
 main();

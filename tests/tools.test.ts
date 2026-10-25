@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { newSessionState, proposeLog, submitLog, checkPartStock, findEquipment, type ToolContext } from "../src/tools.js";
 import { MaintainOpsClient } from "../src/maintainops.js";
+import { requestTitle } from "../src/odoo.js";
 import { FakeMaintainOps } from "./fakes.js";
 
 function ctx(api = new FakeMaintainOps()): ToolContext & { api: FakeMaintainOps } {
@@ -96,7 +97,13 @@ describe("submit_log", () => {
     c.state.lastUserUtterance = "yes";
     expect(await submitLog(c)).toMatchObject({ status: "submitted", maintainops_log_id: 100 });
     expect(c.api.created).toEqual([
-      { equipment_id: 2, description: "[Voice log] Duration: 45 min. Changed oil and filter", parts_used: [{ part_id: 6, quantity: 1 }] },
+      {
+        equipment_id: 2,
+        description: "[Voice log] Duration: 45 min. Changed oil and filter",
+        parts_used: [{ part_id: 6, quantity: 1 }],
+        duration_minutes: 45,
+        technician_id: null,
+      },
     ]);
     expect(c.state.pending).toBeNull();
     // A second yes does not submit twice
@@ -131,6 +138,17 @@ describe("MaintainOpsClient", () => {
       shortfalls: [{ part_id: 4, requested: 3, available: 1 }],
     });
   });
+  it("sends MaintainOps only the fields its schema has", async () => {
+    let sent: unknown;
+    const fakeFetch = (async (_url: string, init: RequestInit) => {
+      sent = JSON.parse(String(init.body));
+      return new Response(JSON.stringify({ id: 1 }), { status: 201 });
+    }) as unknown as typeof fetch;
+    await new MaintainOpsClient("http://x", fakeFetch).createMaintenanceLog({
+      equipment_id: 1, description: "d", parts_used: [], duration_minutes: 30, technician_id: 8,
+    });
+    expect(sent).toEqual({ equipment_id: 1, description: "d", parts_used: [] });
+  });
   it("parses a 404", async () => {
     const fakeFetch = (async () => new Response(JSON.stringify({ detail: "Equipment 999 not found" }), { status: 404 })) as unknown as typeof fetch;
     const r = await new MaintainOpsClient("http://x", fakeFetch).createMaintenanceLog({ equipment_id: 999, description: "d", parts_used: [] });
@@ -157,5 +175,13 @@ describe("guards added after eval run 1", () => {
     c.state.utterances = ["Changed one air filter on the generator, thirty minutes."];
     const r = await proposeLog(c, { ...good, equipment: "generator" });
     expect(r).toMatchObject({ issues: [{ code: "ambiguous_equipment" }] });
+  });
+});
+
+describe("Odoo request title", () => {
+  it("keeps only the notes, since Odoo has real technician and duration fields", () => {
+    expect(requestTitle("[Voice log] Technician: Priya Shah. Duration: 45 min. Changed one air filter")).toBe("Changed one air filter");
+    expect(requestTitle("[Voice log] Duration: 10 min. Swapped battery")).toBe("Swapped battery");
+    expect(requestTitle("[Voice log] Duration: 10 min. ")).toBe("Voice maintenance log");
   });
 });

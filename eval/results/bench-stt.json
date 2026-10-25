@@ -1,0 +1,31 @@
+{
+  "ran_at": "2026-10-25T03:55:43.047Z",
+  "model": "base.en",
+  "clips": [
+    "c01-clean-washer.wav",
+    "c02-clean-pump.wav",
+    "c08-ambiguous-generator.wav",
+    "c13-short-belts.wav",
+    "c15-missing-duration.wav",
+    "c20-multi-issue.wav"
+  ],
+  "one_shot_ms": [
+    7623,
+    2270,
+    2122,
+    2576,
+    2341,
+    5801
+  ],
+  "persistent_ms": [
+    1159,
+    975,
+    798,
+    1056,
+    1053,
+    4877
+  ],
+  "worker_start_ms": 1388,
+  "median_one_shot_ms": 2576,
+  "median_persistent_ms": 1056
+}

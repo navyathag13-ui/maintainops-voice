@@ -28,9 +28,10 @@ export interface ResolvedDraft {
   notes: string;
 }
 
-export function describeForMaintainOps(d: ResolvedDraft): string {
-  // MaintainOps' log has no duration column, so it goes into the description.
-  return `[Voice log] Duration: ${d.duration_minutes} min. ${d.notes}`;
+export function describeForMaintainOps(d: ResolvedDraft, technician?: { name: string } | null): string {
+  // MaintainOps' log has no duration or technician column, so both go into the description.
+  const tech = technician ? `Technician: ${technician.name}. ` : "";
+  return `[Voice log] ${tech}Duration: ${d.duration_minutes} min. ${d.notes}`;
 }
 
 export function spokenSummary(d: ResolvedDraft): string {

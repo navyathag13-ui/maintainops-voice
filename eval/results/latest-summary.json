@@ -1,26 +1,27 @@
 {
-  "ran_at": "2026-10-25T03:36:59.379Z",
+  "ran_at": "2026-10-25T04:42:35.607Z",
+  "backend": "odoo http://localhost:8069/voice",
   "models": {
     "provider": "local",
     "stt": "faster-whisper base.en",
     "llm": "ollama qwen2.5:7b",
     "tts": "macOS say (Samantha)"
   },
-  "llm_warmup_ms": 367,
+  "warmup_ms": 7481,
   "runs": 32,
   "completed": 32,
   "skipped": [],
-  "correct_outcomes": 32,
+  "correct_outcomes": 31,
   "wrong_submissions": [],
   "field_accuracy": {
-    "cases_scored": 31,
+    "cases_scored": 30,
     "equipment": 1,
     "parts": 1,
     "duration_minutes": 1
   },
   "mistakes": {
     "cases_with_mistake": 21,
-    "caught": 21,
+    "caught": 20,
     "caught_ids": [
       "c08-ambiguous-generator [text]",
       "c09-ambiguous-pump [text]",
@@ -29,7 +30,6 @@
       "c12-unknown-equipment [text]",
       "c13-short-belts [text]",
       "c14-short-discs [text]",
-      "c15-missing-duration [text]",
       "c16-missing-equipment [text]",
       "c17-correction-at-readback [text]",
       "c19-cancel [text]",
@@ -44,13 +44,14 @@
       "c15-missing-duration [audio]",
       "c20-multi-issue [audio]"
     ],
-    "missed_ids": []
+    "missed_ids": [
+      "c15-missing-duration [text]"
+    ]
   },
-  "oracle_answers": 13,
+  "oracle_answers": 16,
   "readback_corrections": {
-    "total": 2,
+    "total": 1,
     "runs": [
-      "c02-clean-pump [text]",
       "h06-plug-not-spark-plug [text]"
     ]
   },
@@ -59,27 +60,27 @@
     "correct": 6,
     "wrong_submissions": []
   },
-  "turns": 91,
+  "turns": 92,
   "latency_ms": {
     "total_per_turn": {
-      "median": 7404,
-      "p95": 15296
+      "median": 7718,
+      "p95": 17676
     },
     "llm_per_turn": {
-      "median": 5122,
-      "p95": 9672
+      "median": 5101,
+      "p95": 14910
     },
     "tts_per_turn": {
-      "median": 1940,
-      "p95": 2679
+      "median": 1765,
+      "p95": 2603
     },
     "stt_audio_turns": {
-      "median": 2396,
-      "p95": 7847
+      "median": 916,
+      "p95": 4924
     },
     "total_audio_turns": {
-      "median": 13921,
-      "p95": 17802
+      "median": 11752,
+      "p95": 13822
     }
   },
   "audio_wer_mean": 0.078

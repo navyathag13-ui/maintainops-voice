@@ -7,3 +7,6 @@ data/*.json
 .venv/
 .DS_Store
 RESUME_FACTS.md
+data/*.jsonl
+eval/real/audio/*
+!eval/real/audio/.gitkeep

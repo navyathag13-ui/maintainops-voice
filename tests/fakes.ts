@@ -1,8 +1,9 @@
 import type { ChatMessage, LlmClient, ToolCall } from "../src/openai.js";
 import type {
   CreateLogResult,
+  Employee,
   Equipment,
-  MaintainOpsApi,
+  MaintenanceBackend,
   MaintenanceLogCreate,
   Part,
 } from "../src/maintainops.js";
@@ -16,7 +17,7 @@ const part = (id: number, name: string, qty: number): Part => ({
 
 // A tiny in-memory MaintainOps with the same names as its seed data and the
 // same all-or-nothing stock rule (400 + shortfalls, nothing written).
-export class FakeMaintainOps implements MaintainOpsApi {
+export class FakeMaintainOps implements MaintenanceBackend {
   equipment: Equipment[] = [
     eq(1, "Generator #01"), eq(2, "Generator #02"), eq(3, "Generator #03"),
     eq(4, "Water Pump #01"), eq(5, "Water Pump #02"), eq(6, "Pressure Washer #01"),
@@ -26,11 +27,17 @@ export class FakeMaintainOps implements MaintainOpsApi {
     part(4, "Drive Belts", 1), part(5, "Bearings", 20), part(6, "Oil Filters", 3),
     part(7, "Air Filters", 28), part(28, "Respirator Filters", 2), part(15, "Hydraulic Hoses", 13),
   ];
+  employees: Employee[] = [
+    { id: 3, name: "Alex Carter", role: "technician", active: true },
+    { id: 8, name: "Priya Shah", role: "technician", active: true },
+    { id: 11, name: "Former Tech", role: "technician", active: false },
+  ];
   created: MaintenanceLogCreate[] = [];
   nextId = 100;
 
   async listEquipment() { return structuredClone(this.equipment); }
   async listParts() { return structuredClone(this.parts); }
+  async listEmployees() { return structuredClone(this.employees); }
 
   async createMaintenanceLog(body: MaintenanceLogCreate): Promise<CreateLogResult> {
     if (!this.equipment.some((e) => e.id === body.equipment_id)) {

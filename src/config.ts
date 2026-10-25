@@ -16,7 +16,13 @@ export function getConfig() {
     // "openai" (paid API) or "local" (Ollama + faster-whisper + macOS say, no cost)
     provider: (process.env.PROVIDER ?? "openai") as "openai" | "local",
     openaiKey: process.env.OPENAI_API_KEY ?? "",
+    // Which maintenance system logs are written to: "maintainops" or "odoo".
+    backend: (process.env.BACKEND ?? "maintainops") as "maintainops" | "odoo",
     maintainopsUrl: process.env.MAINTAINOPS_URL ?? "http://localhost:8000",
+    odooUrl: process.env.ODOO_URL ?? "http://localhost:8069",
+    odooDb: process.env.ODOO_DB ?? "voice",
+    odooUser: process.env.ODOO_USER ?? "admin",
+    odooPassword: process.env.ODOO_PASSWORD ?? "admin",
     port: Number(process.env.PORT ?? 3001),
     sttModel: process.env.STT_MODEL ?? "whisper-1",
     llmModel: process.env.LLM_MODEL ?? "gpt-4o-mini",
@@ -28,6 +34,7 @@ export function getConfig() {
     localWhisperModel: process.env.LOCAL_WHISPER_MODEL ?? "base.en",
     sayVoice: process.env.SAY_VOICE ?? "Samantha",
     historyPath: process.env.HISTORY_PATH ?? "data/history.json",
+    turnLogPath: process.env.TURN_LOG_PATH ?? "data/turns.jsonl",
   };
 }
 

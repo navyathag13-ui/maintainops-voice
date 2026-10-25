@@ -1,11 +1,11 @@
 import type { ChatMessage, LlmClient } from "./openai.js";
 import { isCancel, isConfirmation } from "./confirm.js";
 import { newSessionState, runTool, submitLog, toolDefinitions, type Issue, type SessionState, type ToolContext } from "./tools.js";
-import type { MaintainOpsApi, MaintenanceLogRead } from "./maintainops.js";
+import type { MaintenanceBackend, MaintenanceLogRead } from "./maintainops.js";
 import { spokenSummary, type ResolvedDraft } from "./schema.js";
 
 export const SYSTEM_PROMPT = `You are a voice assistant for maintenance technicians at a small industrial site.
-The technician speaks a maintenance log; you turn it into a MaintainOps record.
+The technician speaks a maintenance log; you turn it into a record in the site's maintenance system.
 Replies are spoken aloud: one or two short sentences, no lists, no markdown.
 
 A log needs: equipment, parts used with quantities (may be none), duration in minutes, and a short note on what was done.
@@ -17,8 +17,21 @@ Rules:
 - You cannot save logs. The system reads the summary back and saves it only after the technician says yes. Never say a log was saved.
 - Durations are in minutes ("an hour and a half" = 90).`;
 
+// What happened in a turn, for the turn log and the review queue.
+export type TurnEvent =
+  | "submitted"
+  | "rejected_by_maintainops"
+  | "cancelled"
+  | "readback_corrected"
+  | "clarifying_question"
+  | "read_back"
+  | "nudged"
+  | "save_claim_replaced"
+  | "stuck";
+
 export interface TurnResult {
   reply: string;
+  events: TurnEvent[];
   toolCalls: { name: string; args: unknown; result: unknown }[];
   llmMs: number;
   llmCalls: number;
@@ -36,8 +49,10 @@ export class Agent {
 
   constructor(
     private llm: LlmClient,
-    private api: MaintainOpsApi,
+    private api: MaintenanceBackend,
     private onSubmitted?: (log: MaintenanceLogRead, draft: ResolvedDraft, transcript: string[]) => void | Promise<void>,
+    // Name spoken to the technician for the system logs go to.
+    private system = "MaintainOps",
   ) {}
 
   async turn(utterance: string): Promise<TurnResult> {
@@ -60,12 +75,15 @@ export class Agent {
     }
   }
 
-  private say(reply: string, rest: Omit<TurnResult, "reply" | "state">): TurnResult {
+  private events: TurnEvent[] = [];
+
+  private say(reply: string, rest: Omit<TurnResult, "reply" | "state" | "events">): TurnResult {
     this.messages.push({ role: "assistant", content: reply });
-    return { reply, ...rest, state: this.state };
+    return { reply, events: this.events, ...rest, state: this.state };
   }
 
   private async runTurn(utterance: string): Promise<TurnResult> {
+    this.events = [];
     this.state.turn += 1;
     this.state.lastUserUtterance = utterance;
     this.state.utterances.push(utterance);
@@ -74,6 +92,7 @@ export class Agent {
     const ctx: ToolContext = {
       api: this.api,
       state: this.state,
+      system: this.system,
       onSubmitted: (log, draft) => this.onSubmitted?.(log, draft, [...this.state.utterances]),
     };
     const toolCalls: TurnResult["toolCalls"] = [];
@@ -85,9 +104,11 @@ export class Agent {
       if (isConfirmation(utterance)) {
         const result = await submitLog(ctx);
         toolCalls.push({ name: "submit_log", args: {}, result });
+        if (result.status === "submitted") this.events.push("submitted");
+        if (result.status === "rejected") this.events.push("rejected_by_maintainops");
         const reply =
           result.status === "submitted"
-            ? `Saved to MaintainOps as log number ${result.maintainops_log_id}.`
+            ? `Saved to ${this.system} as ${this.system === "MaintainOps" ? "log" : "record"} number ${result.maintainops_log_id}.`
             : result.status === "rejected"
               ? (result.issues?.[0]?.question ?? "MaintainOps rejected the log. Nothing was saved.")
               : "Sorry, I couldn't submit that. Can you say yes again?";
@@ -96,12 +117,14 @@ export class Agent {
       if (isCancel(utterance)) {
         this.state.pending = null;
         this.state.cancelled = true;
+        this.events.push("cancelled");
         this.state.lastDraft = null;
         this.state.lastIssues = [];
         return this.say("Okay, I won't save it. Nothing was submitted.", { toolCalls, llmMs: 0, llmCalls: 0 });
       }
       // Anything else is a correction: the model re-proposes the log.
       this.state.pending = null;
+      this.events.push("readback_corrected");
     }
     // A log is in progress if the last turn ended in a read-back or a question
     // from propose_log. Answers to those must lead to a new propose_log call.
@@ -123,9 +146,13 @@ export class Agent {
         modelText = msg.content?.trim() ?? "";
         // Seen in eval run 2: after "15 minutes." or a correction, qwen2.5:7b
         // replied "Proposing log again with 15 minutes" and called nothing.
-        // Retry once with an explicit instruction instead of speaking that.
-        if (logInProgress && !nudged && !modelText.endsWith("?")) {
+        // Seen in run 4: it asked "...in 15 minutes. Confirm?" itself, a
+        // read-back that isn't the real record. While a log is in progress,
+        // every question comes from propose_log, so any reply without a tool
+        // call gets one retry with an explicit instruction.
+        if (logInProgress && !nudged) {
           nudged = true;
+          this.events.push("nudged");
           this.messages.push({ role: "assistant", content: msg.content ?? "" });
           this.messages.push({
             role: "system",
@@ -161,12 +188,22 @@ export class Agent {
     const pending = this.state.pending as SessionState["pending"];
     if (lastPropose?.status === "awaiting_confirmation" && pending) {
       reply = readBack(pending.draft);
+      this.events.push("read_back");
     } else if (lastPropose?.issues?.length) {
       reply = lastPropose.issues[0].question;
+      this.events.push("clarifying_question");
     } else if (!modelText) {
       reply = "Sorry, I got stuck on that one. Can you repeat the log?";
+      this.events.push("stuck");
+    } else if (logInProgress) {
+      // The model ignored the retry too (seen in eval run 5: "Propose_log with
+      // 15 minutes duration."). Don't speak its prose; repeat the open question.
+      const open = this.state.lastIssues[0]?.question;
+      reply = open ? `Sorry, I didn't get that. ${open}` : "Sorry, I didn't get that. Can you say the whole log again?";
+      this.events.push("stuck");
     } else if (CLAIMS_SAVED.test(modelText)) {
       reply = "Nothing has been saved yet. Which equipment was it, and how long did the job take?";
+      this.events.push("save_claim_replaced");
     } else {
       reply = modelText;
     }

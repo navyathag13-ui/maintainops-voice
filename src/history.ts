@@ -5,7 +5,10 @@ import { dirname } from "node:path";
 // for the log itself; this keeps what only the voice side knows: the
 // transcript that produced it.
 export interface VoiceLogEntry {
+  // Id of the record in `system` (a MaintainOps log id or an Odoo maintenance.request id).
   maintainops_log_id: number;
+  system?: string;
+  technician: string | null;
   equipment: string;
   parts: { name: string; quantity: number }[];
   duration_minutes: number;

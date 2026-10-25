@@ -48,3 +48,6 @@ dd { margin: 0; }
 .issues { padding-left: 18px; color: var(--danger); }
 table { width: 100%; border-collapse: collapse; }
 td { padding: 6px 8px; border-top: 1px solid var(--border); }
+.tech select { font: inherit; padding: 7px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
+.review { border-top: 1px solid var(--border); padding: 8px 0; }
+.tag { display: inline-block; font-size: 0.8rem; padding: 1px 8px; margin-right: 6px; border-radius: 999px; background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }

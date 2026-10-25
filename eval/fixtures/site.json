@@ -1,0 +1,253 @@
+{
+  "source": "MaintainOps demo seed: equipment, parts and stock as read from its API on 2026-10-24 before any eval run",
+  "equipment": [
+    "Cordless Drill #01",
+    "Cordless Drill #02",
+    "Cordless Drill #03",
+    "Impact Driver #01",
+    "Impact Driver #02",
+    "Circular Saw #01",
+    "Circular Saw #02",
+    "Circular Saw #03",
+    "Angle Grinder #01",
+    "Angle Grinder #02",
+    "Angle Grinder #03",
+    "Concrete Mixer #01",
+    "Concrete Mixer #02",
+    "Generator #01",
+    "Generator #02",
+    "Generator #03",
+    "Water Pump #01",
+    "Water Pump #02",
+    "Air Compressor #01",
+    "Air Compressor #02",
+    "Welding Machine #01",
+    "Welding Machine #02",
+    "Nail Gun #01",
+    "Nail Gun #02",
+    "Pressure Washer #01",
+    "Extension Reel #01",
+    "Extension Reel #02",
+    "Ladder #01",
+    "Ladder #02",
+    "Safety Harness #01",
+    "Safety Harness #02",
+    "Safety Harness #03",
+    "Safety Harness #04",
+    "Safety Harness #05",
+    "Safety Harness #06",
+    "Rotary Hammer #01",
+    "Rotary Hammer #02",
+    "Demolition Hammer #01",
+    "Tile Cutter #01",
+    "Shop Vacuum #01",
+    "Shop Vacuum #02",
+    "Plate Compactor #01",
+    "Laser Level #01",
+    "Laser Level #02"
+  ],
+  "parts": [
+    {
+      "name": "Drill Bits",
+      "quantity": 45
+    },
+    {
+      "name": "Saw Blades",
+      "quantity": 54
+    },
+    {
+      "name": "Grinding Discs",
+      "quantity": 3
+    },
+    {
+      "name": "Drive Belts",
+      "quantity": 1
+    },
+    {
+      "name": "Bearings",
+      "quantity": 20
+    },
+    {
+      "name": "Oil Filters",
+      "quantity": 3
+    },
+    {
+      "name": "Air Filters",
+      "quantity": 28
+    },
+    {
+      "name": "Spark Plugs",
+      "quantity": 44
+    },
+    {
+      "name": "Hex Bolts",
+      "quantity": 507
+    },
+    {
+      "name": "Wood Screws",
+      "quantity": 80
+    },
+    {
+      "name": "Concrete Anchors",
+      "quantity": 202
+    },
+    {
+      "name": "Safety Anchors",
+      "quantity": 71
+    },
+    {
+      "name": "Electrical Cable",
+      "quantity": 26
+    },
+    {
+      "name": "Fuses",
+      "quantity": 85
+    },
+    {
+      "name": "Hydraulic Hoses",
+      "quantity": 13
+    },
+    {
+      "name": "Lubricant",
+      "quantity": 39
+    },
+    {
+      "name": "Hydraulic Fluid",
+      "quantity": 24
+    },
+    {
+      "name": "Replacement Chains",
+      "quantity": 47
+    },
+    {
+      "name": "Power Tool Batteries",
+      "quantity": 51
+    },
+    {
+      "name": "O-Ring Seals",
+      "quantity": 44
+    },
+    {
+      "name": "Assorted Fasteners",
+      "quantity": 65
+    },
+    {
+      "name": "Cutting Discs",
+      "quantity": 22
+    },
+    {
+      "name": "Welding Tips",
+      "quantity": 28
+    },
+    {
+      "name": "Hose Clamps",
+      "quantity": 37
+    },
+    {
+      "name": "Safety Glasses",
+      "quantity": 6
+    },
+    {
+      "name": "Work Gloves",
+      "quantity": 22
+    },
+    {
+      "name": "Ear Protection",
+      "quantity": 16
+    },
+    {
+      "name": "Respirator Filters",
+      "quantity": 2
+    },
+    {
+      "name": "Zip Ties",
+      "quantity": 21
+    },
+    {
+      "name": "Duct Tape",
+      "quantity": 34
+    },
+    {
+      "name": "Tarps",
+      "quantity": 64
+    },
+    {
+      "name": "Extension Cords",
+      "quantity": 20
+    },
+    {
+      "name": "Gas Cans",
+      "quantity": 56
+    },
+    {
+      "name": "PVC Fittings",
+      "quantity": 39
+    },
+    {
+      "name": "Copper Fittings",
+      "quantity": 84
+    },
+    {
+      "name": "Rebar Ties",
+      "quantity": 22
+    },
+    {
+      "name": "Silicone Sealant",
+      "quantity": 20
+    },
+    {
+      "name": "Tape Measures",
+      "quantity": 21
+    },
+    {
+      "name": "Marking Chalk",
+      "quantity": 64
+    },
+    {
+      "name": "Sandpaper",
+      "quantity": 87
+    }
+  ],
+  "employees": [
+    {
+      "name": "Jake Morgan",
+      "role": "manager"
+    },
+    {
+      "name": "Maya Patel",
+      "role": "manager"
+    },
+    {
+      "name": "Alex Carter",
+      "role": "technician"
+    },
+    {
+      "name": "Jordan Lee",
+      "role": "technician"
+    },
+    {
+      "name": "Chris Miller",
+      "role": "equipment operator"
+    },
+    {
+      "name": "Taylor Brooks",
+      "role": "technician"
+    },
+    {
+      "name": "Sam Wilson",
+      "role": "site worker"
+    },
+    {
+      "name": "Priya Shah",
+      "role": "technician"
+    },
+    {
+      "name": "Ethan Davis",
+      "role": "equipment operator"
+    },
+    {
+      "name": "Olivia Reed",
+      "role": "site worker"
+    }
+  ]
+}

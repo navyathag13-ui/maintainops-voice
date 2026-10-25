@@ -45,3 +45,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t maintainops-voice .
+
+  odoo-integration:
+    # Runs the live-API tests against a real Odoo 17 started from odoo/docker-compose.yml.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Odoo with Maintenance, Inventory and Employees
+        run: |
+          ./odoo/init.sh
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:8069/web/login && break; sleep 3; done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx odoo/seed.ts --reset-stock
+      - run: npx vitest run tests/odoo.integration.test.ts
+        env:
+          ODOO_URL: http://localhost:8069
