@@ -1,0 +1,581 @@
+{
+ "model": "qwen2.5:7b",
+ "variant": "reference",
+ "summary": {
+  "model": "qwen2.5:7b",
+  "variant": "reference",
+  "n": 80,
+  "tp": 56,
+  "tn": 21,
+  "fp": 0,
+  "fn": 3,
+  "accuracy": 0.963,
+  "kappa": 0.907,
+  "falsePassRate": 0,
+  "falseFailRate": 0.051,
+  "median_ms": 28281,
+  "false_passes": []
+ },
+ "verdicts": {
+  "run1-baseline/c02-clean-pump/text": {
+   "pass": false,
+   "reason": "The log did not include the correct parts.",
+   "ms": 26902,
+   "label": false,
+   "category": "clean"
+  },
+  "run1-baseline/c07-clean-drill/text": {
+   "pass": false,
+   "reason": "The assistant did not stop asking for clarification after the technician stated 'That's everything.'",
+   "ms": 47404,
+   "label": false,
+   "category": "clean"
+  },
+  "run1-baseline/c14-short-discs/text": {
+   "pass": false,
+   "reason": "The wrong angle grinder was logged (Angle Grinder #01 instead of Angle Grinder #02), and no grinding discs were recorded as used.",
+   "ms": 47823,
+   "label": false,
+   "category": "insufficient_stock"
+  },
+  "run1-baseline/c15-missing-duration/text": {
+   "pass": false,
+   "reason": "The duration minutes is incorrect.",
+   "ms": 24960,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run1-baseline/c16-missing-equipment/text": {
+   "pass": true,
+   "reason": "The record matches the description provided by the technician.",
+   "ms": 27238,
+   "label": true,
+   "category": "missing_field"
+  },
+  "run1-baseline/c20-multi-issue/audio": {
+   "pass": false,
+   "reason": "The assistant did not clarify all issues and kept asking, preventing a final record.",
+   "ms": 35076,
+   "label": false,
+   "category": "multi_issue"
+  },
+  "run1-baseline/c20-multi-issue/text": {
+   "pass": false,
+   "reason": "The assistant did not clarify all issues and kept asking for clarification indefinitely without saving a record.",
+   "ms": 3181,
+   "label": false,
+   "category": "multi_issue"
+  },
+  "run2/c02-clean-pump/text": {
+   "pass": false,
+   "reason": "Nothing was saved when it should have been.",
+   "ms": 19381,
+   "label": false,
+   "category": "clean"
+  },
+  "run2/c06-clean-welder/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 23397,
+   "label": true,
+   "category": "clean"
+  },
+  "run2/c08-ambiguous-generator/text": {
+   "pass": true,
+   "reason": "The record matches the description given by the technician.",
+   "ms": 26351,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run2/c10-ambiguous-filters/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description and was saved correctly after clarification.",
+   "ms": 25503,
+   "label": true,
+   "category": "ambiguous_part"
+  },
+  "run2/c13-short-belts/text": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 26341,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run2/c15-missing-duration/audio": {
+   "pass": false,
+   "reason": "Nothing was saved when a record should have been.",
+   "ms": 15416,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run2/c15-missing-duration/text": {
+   "pass": false,
+   "reason": "Nothing was saved when a valid log should have been created.",
+   "ms": 18654,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run2/c16-missing-equipment/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description and was confirmed before submission.",
+   "ms": 27088,
+   "label": true,
+   "category": "missing_field"
+  },
+  "run2/c19-cancel/text": {
+   "pass": true,
+   "reason": "Nothing was logged as instructed.",
+   "ms": 14304,
+   "label": true,
+   "category": "cancel"
+  },
+  "run2/h05-correction-duration/text": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 24627,
+   "label": true,
+   "category": "correction"
+  },
+  "run2/h06-plug-not-spark-plug/text": {
+   "pass": false,
+   "reason": "Nothing was saved when a record should have been.",
+   "ms": 18726,
+   "label": false,
+   "category": "unknown_part"
+  },
+  "run3-final/c01-clean-washer/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, parts, and duration.",
+   "ms": 20801,
+   "label": true,
+   "category": "clean"
+  },
+  "run3-final/c02-clean-pump/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description exactly.",
+   "ms": 41915,
+   "label": true,
+   "category": "clean"
+  },
+  "run3-final/c03-clean-no-parts/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, no parts used, and the correct duration.",
+   "ms": 19228,
+   "label": true,
+   "category": "clean"
+  },
+  "run3-final/c04-clean-generator/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 21515,
+   "label": true,
+   "category": "clean"
+  },
+  "run3-final/c06-clean-welder/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, parts, and duration.",
+   "ms": 25227,
+   "label": true,
+   "category": "clean"
+  },
+  "run3-final/c09-ambiguous-pump/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, parts, quantity, and duration.",
+   "ms": 31928,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run3-final/c12-unknown-equipment/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 33526,
+   "label": true,
+   "category": "unknown_equipment"
+  },
+  "run3-final/c13-short-belts/audio": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 38932,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run3-final/c13-short-belts/text": {
+   "pass": true,
+   "reason": "The record matches the technician's confirmation.",
+   "ms": 29103,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run3-final/c15-missing-duration/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description and was correctly saved.",
+   "ms": 45163,
+   "label": true,
+   "category": "missing_field"
+  },
+  "run3-final/h03-short-respirator/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, and duration after clarification.",
+   "ms": 36844,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run4-odoo-qwen7b/c01-clean-washer/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description exactly.",
+   "ms": 43455,
+   "label": true,
+   "category": "clean"
+  },
+  "run4-odoo-qwen7b/c02-clean-pump/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, quantity, and duration.",
+   "ms": 44232,
+   "label": true,
+   "category": "clean"
+  },
+  "run4-odoo-qwen7b/c03-clean-no-parts/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, no parts used, and the correct duration.",
+   "ms": 19718,
+   "label": true,
+   "category": "clean"
+  },
+  "run4-odoo-qwen7b/c07-clean-drill/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, quantity, and duration.",
+   "ms": 30489,
+   "label": true,
+   "category": "clean"
+  },
+  "run4-odoo-qwen7b/c08-ambiguous-generator/audio": {
+   "pass": true,
+   "reason": "The record matches the description given by the technician.",
+   "ms": 26404,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run4-odoo-qwen7b/c09-ambiguous-pump/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, quantity, and duration after clarification.",
+   "ms": 39403,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run4-odoo-qwen7b/c12-unknown-equipment/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, parts, and duration.",
+   "ms": 30859,
+   "label": true,
+   "category": "unknown_equipment"
+  },
+  "run4-odoo-qwen7b/c13-short-belts/audio": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 31906,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run4-odoo-qwen7b/c14-short-discs/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with no parts due to insufficient stock.",
+   "ms": 39619,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run4-odoo-qwen7b/c15-missing-duration/text": {
+   "pass": false,
+   "reason": "The assistant did not correctly interpret the technician's confirmation and saved a record that was never confirmed as correct.",
+   "ms": 32604,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run4-odoo-qwen7b/c17-correction-at-readback/text": {
+   "pass": true,
+   "reason": "The system correctly logged the job after receiving clarification from the technician.",
+   "ms": 23984,
+   "label": true,
+   "category": "correction"
+  },
+  "run4-odoo-qwen7b/h05-correction-duration/text": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 28281,
+   "label": true,
+   "category": "correction"
+  },
+  "run4-odoo-qwen7b/h06-plug-not-spark-plug/text": {
+   "pass": true,
+   "reason": "The system correctly followed the technician's instructions and saved the log without guessing or omitting details.",
+   "ms": 27320,
+   "label": true,
+   "category": "unknown_part"
+  },
+  "run5-odoo-qwen7b/c08-ambiguous-generator/audio": {
+   "pass": true,
+   "reason": "The record matches the description given by the technician.",
+   "ms": 26531,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run5-odoo-qwen7b/c09-ambiguous-pump/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 28542,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run5-odoo-qwen7b/c13-short-belts/text": {
+   "pass": true,
+   "reason": "The record was correctly saved without any guessed values.",
+   "ms": 24610,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run5-odoo-qwen7b/c15-missing-duration/text": {
+   "pass": false,
+   "reason": "Nothing was saved when a record should have been.",
+   "ms": 18083,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run5-odoo-qwen7b/c20-multi-issue/audio": {
+   "pass": false,
+   "reason": "The assistant did not ask about the drive belts quantity after the technician clarified the equipment.",
+   "ms": 21089,
+   "label": false,
+   "category": "multi_issue"
+  },
+  "run5-odoo-qwen7b/c20-multi-issue/text": {
+   "pass": false,
+   "reason": "The assistant did not ask about the drive belts quantity after the technician clarified the equipment.",
+   "ms": 17372,
+   "label": false,
+   "category": "multi_issue"
+  },
+  "run5-odoo-qwen7b/h05-correction-duration/text": {
+   "pass": true,
+   "reason": "The record matches the technician's final confirmation.",
+   "ms": 31591,
+   "label": true,
+   "category": "correction"
+  },
+  "run5-odoo-qwen7b/h06-plug-not-spark-plug/text": {
+   "pass": false,
+   "reason": "The record does not match the expected outcome as it includes a description field that was not in the answer key.",
+   "ms": 34700,
+   "label": true,
+   "category": "unknown_part"
+  },
+  "run6-odoo-qwen3b/c01-clean-washer/audio": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 40807,
+   "label": true,
+   "category": "clean"
+  },
+  "run6-odoo-qwen3b/c01-clean-washer/text": {
+   "pass": true,
+   "reason": "The assistant correctly asked for clarification on unknown parts and waited for confirmation before saving the record.",
+   "ms": 37569,
+   "label": true,
+   "category": "clean"
+  },
+  "run6-odoo-qwen3b/c04-clean-generator/text": {
+   "pass": false,
+   "reason": "nothing was saved",
+   "ms": 48055,
+   "label": false,
+   "category": "clean"
+  },
+  "run6-odoo-qwen3b/c06-clean-welder/text": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 27572,
+   "label": true,
+   "category": "clean"
+  },
+  "run6-odoo-qwen3b/c12-unknown-equipment/text": {
+   "pass": false,
+   "reason": "The agent should have asked for confirmation of the equipment name instead of skipping the log.",
+   "ms": 17531,
+   "label": false,
+   "category": "unknown_equipment"
+  },
+  "run6-odoo-qwen3b/c13-short-belts/audio": {
+   "pass": true,
+   "reason": "The record matches the technician's final statement.",
+   "ms": 88875,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run6-odoo-qwen3b/c13-short-belts/text": {
+   "pass": false,
+   "reason": "The record does not match the technician's description of leaving the belts off.",
+   "ms": 142318,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run6-odoo-qwen3b/h04-missing-duration/text": {
+   "pass": false,
+   "reason": "The assistant did not save a record despite multiple clarifications being provided by the technician.",
+   "ms": 108255,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run7-odoo-qwen7b/c02-clean-pump/audio": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, quantity, and duration.",
+   "ms": 37694,
+   "label": true,
+   "category": "clean"
+  },
+  "run7-odoo-qwen7b/c08-ambiguous-generator/text": {
+   "pass": true,
+   "reason": "The record matches the description given by the technician.",
+   "ms": 60186,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run7-odoo-qwen7b/c12-unknown-equipment/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, parts, and duration.",
+   "ms": 26660,
+   "label": true,
+   "category": "unknown_equipment"
+  },
+  "run7-odoo-qwen7b/c15-missing-duration/text": {
+   "pass": false,
+   "reason": "The assistant did not save a record despite multiple attempts to get the duration.",
+   "ms": 26960,
+   "label": false,
+   "category": "missing_field"
+  },
+  "run7-odoo-qwen7b/c17-correction-at-readback/text": {
+   "pass": true,
+   "reason": "The system correctly followed the technician's instructions and saved the correct record.",
+   "ms": 26052,
+   "label": true,
+   "category": "correction"
+  },
+  "run7-odoo-qwen7b/c18-duplicate-part/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, and duration after confirmation.",
+   "ms": 24586,
+   "label": true,
+   "category": "duplicate_part"
+  },
+  "run7-odoo-qwen7b/h03-short-respirator/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description after clarification.",
+   "ms": 30147,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run7-odoo-qwen7b/h04-missing-duration/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, quantity, and duration.",
+   "ms": 27565,
+   "label": true,
+   "category": "missing_field"
+  },
+  "run7-odoo-qwen7b/h05-correction-duration/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description.",
+   "ms": 22342,
+   "label": true,
+   "category": "correction"
+  },
+  "run7-odoo-qwen7b/h06-plug-not-spark-plug/text": {
+   "pass": false,
+   "reason": "The record does not match the expected outcome as it includes a placeholder [Voice log] in the description instead of the technician's note.",
+   "ms": 25391,
+   "label": true,
+   "category": "unknown_part"
+  },
+  "run8-odoo-qwen3b/c01-clean-washer/audio": {
+   "pass": true,
+   "reason": "The record was correctly saved with the right equipment, parts, and duration.",
+   "ms": 31516,
+   "label": true,
+   "category": "clean"
+  },
+  "run8-odoo-qwen3b/c04-clean-generator/text": {
+   "pass": false,
+   "reason": "nothing was saved",
+   "ms": 39657,
+   "label": false,
+   "category": "clean"
+  },
+  "run8-odoo-qwen3b/c10-ambiguous-filters/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description exactly.",
+   "ms": 34682,
+   "label": true,
+   "category": "ambiguous_part"
+  },
+  "run8-odoo-qwen3b/c11-unknown-part/text": {
+   "pass": true,
+   "reason": "The record was correctly saved with no parts as per the technician's clarification.",
+   "ms": 32015,
+   "label": true,
+   "category": "unknown_part"
+  },
+  "run8-odoo-qwen3b/c12-unknown-equipment/text": {
+   "pass": false,
+   "reason": "The agent should have asked for confirmation of the equipment name instead of skipping the log.",
+   "ms": 15342,
+   "label": false,
+   "category": "unknown_equipment"
+  },
+  "run8-odoo-qwen3b/c15-missing-duration/audio": {
+   "pass": true,
+   "reason": "One record was correctly saved with the right equipment, parts, quantity, and duration.",
+   "ms": 27030,
+   "label": true,
+   "category": "missing_field"
+  },
+  "run8-odoo-qwen3b/c18-duplicate-part/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description exactly.",
+   "ms": 35377,
+   "label": true,
+   "category": "duplicate_part"
+  },
+  "run8-odoo-qwen3b/c19-cancel/text": {
+   "pass": true,
+   "reason": "Nothing was logged as instructed.",
+   "ms": 22084,
+   "label": true,
+   "category": "cancel"
+  },
+  "run8-odoo-qwen3b/c20-multi-issue/text": {
+   "pass": true,
+   "reason": "One record was saved with the right equipment, part, quantity, and duration.",
+   "ms": 55113,
+   "label": true,
+   "category": "multi_issue"
+  },
+  "run8-odoo-qwen3b/h02-ambiguous-mixer/text": {
+   "pass": true,
+   "reason": "One record was saved with the correct equipment, parts, quantity, and duration.",
+   "ms": 34312,
+   "label": true,
+   "category": "ambiguous_equipment"
+  },
+  "run8-odoo-qwen3b/h03-short-respirator/text": {
+   "pass": true,
+   "reason": "The record matches the technician's description after clarification.",
+   "ms": 30134,
+   "label": true,
+   "category": "insufficient_stock"
+  },
+  "run8-odoo-qwen3b/h04-missing-duration/text": {
+   "pass": false,
+   "reason": "The assistant did not save a record despite multiple clarifications being provided by the technician.",
+   "ms": 60813,
+   "label": false,
+   "category": "missing_field"
+  }
+ }
+}

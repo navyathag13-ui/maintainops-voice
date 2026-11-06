@@ -31,7 +31,7 @@ It works with two backends:
   - A JSON line per turn.
   - A review queue for turns a person should look at.
   - The technician's identity on every record.
-- **74 vitest tests**, 7 of them against live systems. GitHub Actions runs the unit tests,
+- **83 vitest tests**, 7 of them against live systems. GitHub Actions runs the unit tests,
   live tests against MaintainOps (started from its own repo), live tests against Odoo and a
   Docker build.
 
@@ -191,6 +191,29 @@ failures were tool misuse:
 
 A technician who says yes without listening would have saved those wrong. Every one of these is
 listed under `readback_corrections` in the run summaries.
+
+### Can an LLM judge replace the checker?
+
+The checker above compares each saved record with an answer key. Open-ended conversations
+have no answer key, so I tested whether a local LLM judge (`eval/judge.ts`, qwen2.5 7B,
+temperature 0) agrees with it. The sample is every conversation the checker failed (21)
+plus 59 passing ones picked by a stable hash, 80 in all, taken from runs 1 to 8.
+
+| Judge | Agreement | Cohen's kappa | Bad runs passed | Good runs failed |
+|---|---|---|---|---|
+| Rubric only (transcript + saved record) | 86.3% (69/80) | 0.65 | 5 of 21 | 6 of 59 |
+| Rubric + answer key | 96.3% (77/80) | 0.91 | 0 of 21 | 3 of 59 |
+
+Without the answer key, the judge waved through quiet mistakes: a pump log that dropped 2
+bearings, a guessed duration, a "plug" log that saved nothing. With the answer key it caught all
+21. Its 3 false fails were stricter than the checker, for example objecting to a "[Voice log]"
+description that the checker ignores.
+
+What this means: a rubric-only judge is useful for triage but not as a gate, because the
+errors it misses are the ones that matter most. The scripted checker stays the source of
+truth wherever an answer key exists. The labels here are the checker's, not human review,
+and each call took about 25 to 28 s on the laptop. Verdicts and reasons are in
+`eval/results/judge-*.json`.
 
 ### Latency work
 
