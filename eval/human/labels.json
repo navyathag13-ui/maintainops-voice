@@ -1,0 +1,22 @@
+{
+ "run7-odoo-qwen7b/c08-ambiguous-generator/text": "pass",
+ "run6-odoo-qwen3b/c12-unknown-equipment/text": "fail",
+ "run6-odoo-qwen3b/c01-clean-washer/text": "pass",
+ "run6-odoo-qwen3b/c13-short-belts/audio": "pass",
+ "run6-odoo-qwen3b/c04-clean-generator/text": "fail",
+ "run5-odoo-qwen7b/c20-multi-issue/audio": "fail",
+ "run2/c15-missing-duration/text": "fail",
+ "run1-baseline/c20-multi-issue/text": "fail",
+ "run8-odoo-qwen3b/c01-clean-washer/audio": "pass",
+ "run7-odoo-qwen7b/c18-duplicate-part/text": "pass",
+ "run7-odoo-qwen7b/c17-correction-at-readback/text": "pass",
+ "run8-odoo-qwen3b/c18-duplicate-part/text": "pass",
+ "run8-odoo-qwen3b/h04-missing-duration/text": "fail",
+ "run2/h06-plug-not-spark-plug/text": "fail",
+ "run4-odoo-qwen7b/c02-clean-pump/text": "pass",
+ "run3-final/c15-missing-duration/text": "pass",
+ "run2/c15-missing-duration/audio": "fail",
+ "run8-odoo-qwen3b/c19-cancel/text": "fail",
+ "run3-final/c01-clean-washer/text": "pass",
+ "run3-final/c13-short-belts/audio": "pass"
+}

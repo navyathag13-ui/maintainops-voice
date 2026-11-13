@@ -211,9 +211,29 @@ description that the checker ignores.
 
 What this means: a rubric-only judge is useful for triage but not as a gate, because the
 errors it misses are the ones that matter most. The scripted checker stays the source of
-truth wherever an answer key exists. The labels here are the checker's, not human review,
-and each call took about 25 to 28 s on the laptop. Verdicts and reasons are in
-`eval/results/judge-*.json`.
+truth wherever an answer key exists. The labels above are the checker's, and each call took
+about 25 to 28 s on the laptop. Verdicts and reasons are in `eval/results/judge-*.json`.
+
+#### Checked against my own labels
+
+Agreeing with the checker only shows the judge matches an answer key, not a person. So I
+hand-labeled 20 of the 80 conversations blind (`eval/human-labels.ts`: 8 the checker failed and
+12 it passed, shuffled, shown without any checker label, judge verdict or answer key) and scored
+all three graders against my labels.
+
+| Compared with my labels (n = 20) | Agreement | Cohen's kappa | Bad runs passed | Good runs failed |
+|---|---|---|---|---|
+| Scripted checker | 19 of 20 | 0.90 | 1 of 9 | 0 of 11 |
+| Judge, rubric only | 15 of 20 | 0.49 | 3 of 9 | 2 of 11 |
+| Judge, rubric + answer key | 19 of 20 | 0.90 | 1 of 9 | 0 of 11 |
+
+This confirms the result above with a human reference: the rubric-only judge drifts furthest
+from a person, while the answer-key judge matches me as well as the checker does. The one
+disagreement is a cancelled log where nothing was saved. The checker and both judges passed
+it and I marked it fail; I kept my label as given rather than edit it after seeing the scores.
+Twenty labels from one person is a small sample, so treat these kappas as a sanity check, not a
+precise estimate. To redo it: `npx tsx eval/human-labels.ts page` (or `sheet` for Markdown),
+label, then `npx tsx eval/human-labels.ts score` writes `eval/results/human-agreement.json`.
 
 ### Latency work
 

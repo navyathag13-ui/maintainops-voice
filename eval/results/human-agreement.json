@@ -1,0 +1,32 @@
+{
+ "labeled": 20,
+ "human_says_fail": 9,
+ "checker_vs_human": {
+  "n": 20,
+  "agreement": 0.95,
+  "kappa": 0.898,
+  "bad_runs_passed": "1 of 9",
+  "good_runs_failed": "0 of 11"
+ },
+ "judge_rubric_vs_human": {
+  "n": 20,
+  "agreement": 0.75,
+  "kappa": 0.49,
+  "bad_runs_passed": "3 of 9",
+  "good_runs_failed": "2 of 11"
+ },
+ "judge_reference_vs_human": {
+  "n": 20,
+  "agreement": 0.95,
+  "kappa": 0.898,
+  "bad_runs_passed": "1 of 9",
+  "good_runs_failed": "0 of 11"
+ },
+ "disagreements": [
+  {
+   "key": "run8-odoo-qwen3b/c19-cancel/text",
+   "human": "fail",
+   "checker": "pass"
+  }
+ ]
+}
